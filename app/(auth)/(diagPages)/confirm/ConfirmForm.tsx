@@ -25,9 +25,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { handleCredentialsSignin } from "../actions";
-import Disclaimer from "../Disclaimer";
-import LogoAuth from "../logo";
+import { handleCredentialsSignin } from "../../actions";
+import Disclaimer from "../../Disclaimer";
+import LogoAuth from "../../logo";
 
 const ConfirmForm = () => {
   const [globalError, setGlobalError] = useState<string>("");

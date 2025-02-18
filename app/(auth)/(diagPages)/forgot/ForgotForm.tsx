@@ -25,9 +25,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { handlePasswordReset } from "../actions";
-import Disclaimer from "../Disclaimer";
-import LogoAuth from "../logo";
+import { handlePasswordReset } from "../../actions";
+import Disclaimer from "../../Disclaimer";
+import LogoAuth from "../../logo";
 
 const ForgotForm = () => {
   const [globalError, setGlobalError] = useState<string>("");
