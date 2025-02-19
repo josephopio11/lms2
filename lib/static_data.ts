@@ -1,8 +1,11 @@
+import { BadgeCheck, Brain, SchoolIcon } from "lucide-react";
+
 export const staticLinks = {
   navMain: [
     {
       title: "My Content",
       url: "#",
+      icon: Brain,
       items: [
         {
           title: "Browse",
@@ -21,6 +24,7 @@ export const staticLinks = {
     {
       title: "Profile",
       url: "/profile",
+      icon: BadgeCheck,
     },
   ],
 };
@@ -30,6 +34,7 @@ export const teacherLinks = {
     {
       title: "Teaching",
       url: "/teacher",
+      icon: SchoolIcon,
       items: [
         {
           title: "Courses",

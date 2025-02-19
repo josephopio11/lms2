@@ -2,6 +2,7 @@
 
 import { staticLinks, teacherLinks } from "@/lib/static_data";
 import { cn } from "@/lib/utils";
+import { Dot, LayoutDashboard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {
   SidebarMenu,
@@ -24,7 +25,8 @@ const SidebarMenuContent = () => {
           asChild
           className={cn(isActive("/") && "!bg-primary !text-white")}
         >
-          <a href={"/"} className="font-medium">
+          <a href={"/"} className="flex gap-1 font-medium">
+            <LayoutDashboard size={24} />
             Dashboard
           </a>
         </SidebarMenuButton>
@@ -35,7 +37,8 @@ const SidebarMenuContent = () => {
             asChild
             className={cn(isActive(item.url) && "!bg-primary !text-white")}
           >
-            <a href={item.url} className="font-medium">
+            <a href={item.url} className="flex gap-1 font-medium">
+              <item.icon size={24} />
               {item.title}
             </a>
           </SidebarMenuButton>
@@ -50,7 +53,9 @@ const SidebarMenuContent = () => {
                       isActive(item.url) && "!bg-primary !text-white",
                     )}
                   >
-                    <a href={item.url}>{item.title}</a>
+                    <a href={item.url}>
+                      <Dot size={14} /> {item.title}
+                    </a>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))}
@@ -65,6 +70,7 @@ const SidebarMenuContent = () => {
             className={cn(isActive(item.url) && "!bg-primary !text-white")}
           >
             <a href={item.url} className="font-medium">
+              <item.icon size={24} />
               {item.title}
             </a>
           </SidebarMenuButton>
@@ -79,7 +85,9 @@ const SidebarMenuContent = () => {
                       isActive(item.url) && "!bg-primary !text-white",
                     )}
                   >
-                    <a href={item.url}>{item.title}</a>
+                    <a href={item.url}>
+                      <Dot size={14} /> {item.title}
+                    </a>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))}
