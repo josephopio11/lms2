@@ -29,7 +29,7 @@ export async function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-sidebar-primary-foreground">
                   <FaBookReader className="size-4" />
                 </div>
@@ -41,7 +41,7 @@ export async function AppSidebar({
                     v {process.env.NEXT_PUBLIC_APP_VERSION}
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

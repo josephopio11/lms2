@@ -1,10 +1,6 @@
 export const staticLinks = {
   navMain: [
     {
-      title: "Dashboard",
-      url: "/",
-    },
-    {
       title: "My Content",
       url: "#",
       items: [
@@ -25,6 +21,25 @@ export const staticLinks = {
     {
       title: "Profile",
       url: "/profile",
+    },
+  ],
+};
+
+export const teacherLinks = {
+  navMain: [
+    {
+      title: "Teaching",
+      url: "/teacher",
+      items: [
+        {
+          title: "Courses",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Analytics",
+          url: "/teacher/analytics",
+        },
+      ],
     },
   ],
 };
