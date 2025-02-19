@@ -1,53 +1,28 @@
 import * as React from "react";
 
+import { auth } from "@/auth";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 import { FaBookReader } from "react-icons/fa";
+import SidebarMenuContent from "./sidebar-menu-content";
+import { Button } from "./ui/button";
+import UserButton from "./user-button";
 
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/",
-    },
-    {
-      title: "My Content",
-      url: "/browse",
-      items: [
-        {
-          title: "Browse",
-          url: "#",
-        },
-        {
-          title: "Bookings",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Upcoming events",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Profile",
-      url: "/profile",
-    },
-  ],
-};
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const session = await auth();
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
@@ -73,30 +48,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="gap-2">
-            {data.navMain.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          <SidebarMenuContent />
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        {session?.user ? (
+          <UserButton user={session?.user} />
+        ) : (
+          <Button asChild>
+            <Link href="/login">Sign In</Link>
+          </Button>
+        )}
+      </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }
