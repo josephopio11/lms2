@@ -11,21 +11,16 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { courseTitleSchema, CourseTitleType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 import { createCourse } from "../actions";
 
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-});
-
 const CreateCoursesPage = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CourseTitleType>({
+    resolver: zodResolver(courseTitleSchema),
     defaultValues: {
       title: "",
     },
@@ -33,15 +28,14 @@ const CreateCoursesPage = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: CourseTitleType) => {
+    // console.log(values);
     try {
-      const res = await createCourse(values.title);
-      toast.success("Course created successfully");
-      return redirect("/teacher/courses");
+      await createCourse(values);
+      toast.success("Course created successfully", {});
     } catch (error) {
-      console.log(error);
-      toast.error("An unexpected error occurred. Please try again.");
+      console.log("Something went wrong", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
   return (

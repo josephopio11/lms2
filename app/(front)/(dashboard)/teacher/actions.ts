@@ -2,26 +2,33 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
+import { CourseTitleType } from "@/lib/schemas";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export async function createCourse(title: string) {
+export async function createCourse(values: CourseTitleType) {
   const session = await auth();
-  if (!session?.user) {
-    return {
-      success: false,
-      message: "Unauthorized",
-    };
-  }
+  let created;
+
+  if (!session?.user) return;
+
   const userId = session.user.id;
-  console.log(userId);
-  console.log(title);
-  const created = await db.course.create({
-    data: { title, userId: userId as string },
-  });
-  return {
-    success: true,
-    message: "Course created successfully",
-    data: created,
-  };
+  console.table({ userId, values });
+  if (!userId) return;
+  const { title } = values;
+  if (!title) return;
+  try {
+    created = await db.course.create({
+      data: { title, userId: userId as string },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (!created) return;
+
+  revalidatePath("/teacher/courses");
+  redirect(`/teacher/courses/${created.id}`);
 }
 
 export async function getAllCourses() {
