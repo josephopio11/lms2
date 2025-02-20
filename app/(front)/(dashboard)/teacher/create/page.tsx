@@ -14,11 +14,12 @@ import { Input } from "@/components/ui/input";
 import { courseTitleSchema, CourseTitleType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { createCourse } from "../actions";
+import { createCourseTitle } from "../actions";
 
 const CreateCoursesPage = () => {
+  const router = useRouter();
   const form = useForm<CourseTitleType>({
     resolver: zodResolver(courseTitleSchema),
     defaultValues: {
@@ -29,24 +30,20 @@ const CreateCoursesPage = () => {
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: CourseTitleType) => {
-    // console.log(values);
     try {
-      await createCourse(values);
-      toast.success("Course created successfully", {});
+      const answer = await createCourseTitle(values);
+
+      if (answer) {
+        router.push(`/teacher/courses/${answer.slug}`);
+      }
     } catch (error) {
       console.log("Something went wrong", error);
-      toast.error("Something went wrong. Please try again.");
     }
   };
   return (
     <>
       <PageHeader title3="Create Course" />
       <div className="flex flex-1 flex-col gap-4 p-4 sm:pt-4">
-        {/* <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="aspect-video rounded-xl bg-muted/50" />
-          <div className="aspect-video rounded-xl bg-muted/50" />
-          <div className="aspect-video rounded-xl bg-muted/50" />
-        </div> */}
         <div className="flex min-h-[calc(100vh-6rem)] flex-col gap-4 md:flex-row">
           <div className="rounded-xl bg-muted/50 p-6 md:min-h-min lg:w-3/5">
             <h1 className="text-2xl">Name your course</h1>

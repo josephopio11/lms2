@@ -13,3 +13,10 @@ export function getFirstLettersOfName(name: string | null | undefined) {
     .map((word) => word.charAt(0))
     .join("");
 }
+
+export function sluggify(str: string) {
+  return str
+    .toLowerCase()
+    .replace(/[^\w ]+/g, "")
+    .replace(/ +/g, "-");
+}

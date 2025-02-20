@@ -2,37 +2,103 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { CourseTitleType } from "@/lib/schemas";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { CourseDescriptionType, CourseTitleType } from "@/lib/schemas";
+import { sluggify } from "@/lib/utils";
 
-export async function createCourse(values: CourseTitleType) {
+export async function createCourseTitle(values: CourseTitleType) {
   const session = await auth();
-  let created;
 
   if (!session?.user) return;
 
   const userId = session.user.id;
-  console.table({ userId, values });
+  const title = values.title;
+
   if (!userId) return;
-  const { title } = values;
+
   if (!title) return;
+
+  const slug = sluggify(title);
+
   try {
-    created = await db.course.create({
-      data: { title, userId: userId as string },
+    const created = await db.course.create({
+      data: {
+        title,
+        slug,
+        userId,
+      },
     });
+    return created;
   } catch (error) {
     console.log(error);
+    return;
   }
+}
 
-  if (!created) return;
+export async function updateCourseTitle(values: CourseTitleType, id: string) {
+  const session = await auth();
 
-  revalidatePath("/teacher/courses");
-  redirect(`/teacher/courses/${created.id}`);
+  if (!session?.user) return;
+
+  const userId = session.user.id;
+  const title = values.title;
+
+  if (!userId) return;
+  if (!title) return;
+  if (!id) return;
+
+  const slug = sluggify(title);
+
+  try {
+    const created = await db.course.update({
+      where: { id },
+      data: {
+        title,
+        slug,
+        userId,
+      },
+    });
+    return created;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export async function updateCourseDescription(
+  values: CourseDescriptionType,
+  id: string,
+) {
+  const session = await auth();
+
+  if (!session?.user) return;
+  if (!id) return;
+
+  const description = values.description;
+
+  if (!description) return;
+
+  try {
+    const created = await db.course.update({
+      where: { id },
+      data: {
+        description,
+      },
+    });
+    return created;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 }
 
 export async function getAllCourses() {
   const courses = db.course.findMany();
 
   return courses;
+}
+
+export async function getCourseBySlug(slug: string) {
+  const course = db.course.findUnique({ where: { slug } });
+
+  return course;
 }

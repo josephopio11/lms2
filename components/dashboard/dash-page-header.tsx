@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { DarkModeChangeButton } from "../dark-mode-button";
 
 interface PageHeaderProps {
   title?: string;
@@ -51,11 +50,11 @@ const PageHeader = ({
             )}
             {title2 && (
               <>
-                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbSeparator className="hidden max-w-full md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbLink href={link2}>
                     <BreadcrumbPage className="capitalize">
-                      {title2}
+                      {title2.slice(0, 35)}...
                     </BreadcrumbPage>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -76,7 +75,7 @@ const PageHeader = ({
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <DarkModeChangeButton />
+      {/* <DarkModeChangeButton /> */}
     </header>
   );
 };
