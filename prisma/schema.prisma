@@ -30,6 +30,7 @@ model User {
   authenticators Authenticator[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  UserProgress   UserProgress[]
 
   @@map("users")
 }
@@ -170,4 +171,22 @@ model Tag {
   updatedAt DateTime @updatedAt
 
   @@map("tags")
+}
+
+model Chapter {
+  id             String         @id @default(uuid())
+  userProgresses UserProgress[]
+}
+
+model UserProgress {
+  id        String  @id @default(uuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
+  @@map("user_progresses")
 }
