@@ -1,7 +1,8 @@
 "use client";
 
-import { updateCourseDescription } from "@/app/(front)/(dashboard)/teacher/actions";
-import { courseDescriptionSchema, CourseDescriptionType } from "@/lib/schemas";
+import { updateCoursePrice } from "@/app/(front)/(dashboard)/teacher/actions";
+import { coursePriceSchema, CoursePriceType } from "@/lib/schemas";
+import { formatCurrency } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,23 +18,23 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
 
-interface DescriptionFormProps {
+interface PriceFormProps {
   initialData: {
-    description: string | null;
+    price: number;
   };
   courseId: string;
 }
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseDescriptionType>({
-    resolver: zodResolver(courseDescriptionSchema),
+  const form = useForm<CoursePriceType>({
+    resolver: zodResolver(coursePriceSchema),
     defaultValues: {
-      description: initialData.description || "",
+      price: initialData.price,
     },
   });
 
@@ -41,15 +42,15 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseDescriptionType) => {
+  const onSubmit = async (values: CoursePriceType) => {
     try {
       console.log(values);
-      const answer = await updateCourseDescription(values, courseId);
+      const answer = await updateCoursePrice(values, courseId);
 
       toggleEdit();
 
       if (answer) {
-        toast.success("Course description updated.");
+        toast.success("Course price updated.");
         router.push(`/teacher/courses/${answer.slug}`);
       }
     } catch (error) {
@@ -60,7 +61,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Description:</span>
+        <span className="text-sm text-muted-foreground">Price:</span>
         <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {isEditing ? (
             <>
@@ -70,15 +71,15 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           ) : (
             <>
               <Pencil className="h-4 w-4" />
-              <span className="sr-only">Edit description</span>
+              <span className="sr-only">Edit price</span>
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <span className="w-full font-serif text-sm italic">
-          {initialData.description || "No description"}
+        <span className="w-full">
+          {formatCurrency(initialData.price) || "Free"}
         </span>
       )}
 
@@ -90,25 +91,31 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           >
             <FormField
               control={form.control}
-              name="description"
+              name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
+                    <Input
                       disabled={isSubmitting}
                       placeholder="e.g. 'Advanced web development'"
                       {...field}
+                      type="number"
+                      min={0}
                     />
                   </FormControl>
                   <FormDescription>
-                    Describe in detail what will be taught in this course.
+                    {formatCurrency(0)} means free
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button
+                size={"sm"}
+                disabled={!isValid || isSubmitting}
+                type="submit"
+              >
                 Save
               </Button>
             </div>
@@ -119,4 +126,4 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   );
 };
 
-export default DescriptionForm;
+export default PriceForm;

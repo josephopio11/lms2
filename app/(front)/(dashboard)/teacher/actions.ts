@@ -2,11 +2,21 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { CourseDescriptionType, CourseTitleType } from "@/lib/schemas";
+import {
+  CourseCategoryType,
+  CourseDescriptionType,
+  CoursePriceType,
+  CourseTitleType,
+} from "@/lib/schemas";
 import { sluggify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 
 export async function getAllCourses() {
+  const session = await auth();
+  if (!session?.user) return;
+  const userId = session.user.id;
+  if (!userId) return;
+
   const courses = db.course.findMany({
     select: {
       id: true,
@@ -26,6 +36,11 @@ export async function getAllCourses() {
 }
 
 export async function getCourseBySlug(slug: string) {
+  const session = await auth();
+  if (!session?.user) return;
+  const userId = session.user.id;
+  if (!userId) return;
+
   const course = db.course.findUnique({ where: { slug } });
 
   return course;
@@ -33,9 +48,7 @@ export async function getCourseBySlug(slug: string) {
 
 export async function createCourseTitle(values: CourseTitleType) {
   const session = await auth();
-
   if (!session?.user) return;
-
   const userId = session.user.id;
   const title = values.title;
 
@@ -46,14 +59,14 @@ export async function createCourseTitle(values: CourseTitleType) {
   const slug = sluggify(title);
 
   try {
-    const created = await db.course.create({
+    const result = await db.course.create({
       data: {
         title,
         slug,
         userId,
       },
     });
-    return created;
+    return result;
   } catch (error) {
     console.log(error);
     return null;
@@ -62,9 +75,7 @@ export async function createCourseTitle(values: CourseTitleType) {
 
 export async function updateCourseTitle(values: CourseTitleType, id: string) {
   const session = await auth();
-
   if (!session?.user) return;
-
   const userId = session.user.id;
   const title = values.title;
 
@@ -75,7 +86,7 @@ export async function updateCourseTitle(values: CourseTitleType, id: string) {
   const slug = sluggify(title);
 
   try {
-    const created = await db.course.update({
+    const result = await db.course.update({
       where: { id },
       data: {
         title,
@@ -83,7 +94,7 @@ export async function updateCourseTitle(values: CourseTitleType, id: string) {
         userId,
       },
     });
-    return created;
+    return result;
   } catch (error) {
     console.log(error);
     return;
@@ -95,7 +106,6 @@ export async function updateCourseDescription(
   id: string,
 ) {
   const session = await auth();
-
   if (!session?.user) return;
   if (!id) return;
 
@@ -104,13 +114,36 @@ export async function updateCourseDescription(
   if (!description) return;
 
   try {
-    const created = await db.course.update({
+    const result = await db.course.update({
       where: { id },
       data: {
         description,
       },
     });
-    return created;
+    return result;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export async function updateCoursePrice(values: CoursePriceType, id: string) {
+  const session = await auth();
+  if (!session?.user) return;
+  if (!id) return;
+
+  const price = values.price;
+
+  if (!price) return;
+
+  try {
+    const result = await db.course.update({
+      where: { id },
+      data: {
+        price,
+      },
+    });
+    return result;
   } catch (error) {
     console.log(error);
     return;
@@ -123,10 +156,8 @@ export async function writeFileNameToDatabase(
   slug: string,
 ) {
   const session = await auth();
-
   if (!session?.user) return;
   if (!id) return;
-
   if (!imageUrl) return;
 
   try {
@@ -140,6 +171,51 @@ export async function writeFileNameToDatabase(
     revalidatePath("/teacher/courses");
     revalidatePath(`/teacher/courses/${slug}`);
     return;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export async function getAllCourseCategories() {
+  const session = await auth();
+  if (!session?.user) return;
+  const userId = session.user.id;
+  if (!userId) return;
+
+  const categories = db.category.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return categories;
+}
+
+export async function updateCourseCategory(
+  values: CourseCategoryType,
+  id: string,
+) {
+  const session = await auth();
+  if (!session?.user) return;
+  if (!id) return;
+
+  const categoryId = values.categoryId;
+
+  if (!categoryId) return;
+
+  try {
+    const result = await db.course.update({
+      where: { id },
+      data: {
+        categoryId,
+      },
+    });
+    return result;
   } catch (error) {
     console.log(error);
     return;

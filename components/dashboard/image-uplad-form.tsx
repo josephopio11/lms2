@@ -2,9 +2,10 @@
 
 import { writeFileNameToDatabase } from "@/app/(front)/(dashboard)/teacher/actions";
 import { Course } from "@prisma/client";
-import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import { ImageIcon, Pencil, PlusCircle, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -47,6 +48,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
         initialData.slug,
       );
       setIsEditing(false);
+      toast.success("Course image updated.");
     } catch (error) {
       console.log(error);
     }
@@ -54,21 +56,26 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Course Image:</span>
-        <Button variant={"ghost"} onClick={toggleEdit}>
+        <span className="text-sm text-muted-foreground">Image:</span>
+        <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {!isEditing && !initialData.imageUrl && (
             <>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add an image
+              <PlusCircle className="h-4 w-4" />
+              <span className="sr-only">Add an image</span>
             </>
           )}
           {!isEditing && initialData.imageUrl && (
             <>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit image
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Edit image</span>
             </>
           )}
-          {isEditing && <>Cancel</>}
+          {isEditing && (
+            <>
+              <X className="h-4 w-4" />
+              <span className="sr-only">Edit</span>
+            </>
+          )}
         </Button>
       </div>
 
@@ -85,21 +92,34 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
         <form
           onSubmit={onSubmit}
           className="flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-md border bg-primary-foreground text-xs text-muted-foreground"
+          style={{
+            backgroundImage: `url(${initialData.imageUrl})`,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
         >
-          <input type="hidden" name="oldFile" value={originalImage as string} />
-          <Input
-            type="file"
-            accept="image/*"
-            name="file"
-            onChange={(e) => {
-              setFile(e.target.files?.[0]);
-            }}
-            className="aspect-video w-2/3"
-            id="file"
-            multiple={false}
-          />
-          <span>16:9 aspect ratio recommended</span>
-          <Button type="submit">Upload</Button>
+          <div className="flex w-full flex-col items-center gap-2 bg-primary-foreground/70 p-4">
+            <input
+              type="hidden"
+              name="oldFile"
+              value={originalImage as string}
+            />
+            <Input
+              type="file"
+              accept="image/*"
+              name="file"
+              onChange={(e) => {
+                setFile(e.target.files?.[0]);
+              }}
+              className="aspect-video w-2/3"
+              id="file"
+              multiple={false}
+            />
+            <span>16:9 aspect ratio recommended</span>
+            <Button type="submit" className="text-white">
+              Upload
+            </Button>
+          </div>
         </form>
       )}
       {!isEditing && initialData.imageUrl && (

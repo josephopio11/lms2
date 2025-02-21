@@ -20,3 +20,10 @@ export function sluggify(str: string) {
     .replace(/[^\w ]+/g, "")
     .replace(/ +/g, "-");
 }
+
+export function formatCurrency(amount: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
+}

@@ -3,6 +3,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getAllCourses } from "../actions";
 
+export const generateMetadata = () => ({
+  title: "Courses",
+});
+
 const CoursesPage = async () => {
   const courses = await getAllCourses();
 

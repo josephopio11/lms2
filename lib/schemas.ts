@@ -21,3 +21,15 @@ export const courseImageSchema = z.object({
 });
 
 export type CourseImageType = z.infer<typeof courseImageSchema>;
+
+export const courseCategorySchema = z.object({
+  categoryId: z.string().min(1),
+});
+
+export type CourseCategoryType = z.infer<typeof courseCategorySchema>;
+
+export const coursePriceSchema = z.object({
+  price: z.coerce.number(),
+});
+
+export type CoursePriceType = z.infer<typeof coursePriceSchema>;

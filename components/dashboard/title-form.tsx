@@ -2,7 +2,7 @@
 
 import { updateCourseTitle } from "@/app/(front)/(dashboard)/teacher/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -61,14 +61,17 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Course Title:</span>
-        <Button variant={"ghost"} onClick={toggleEdit}>
+        <span className="text-sm text-muted-foreground">Title:</span>
+        <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {isEditing ? (
-            <>Cancel</>
+            <>
+              <X className="h-4 w-4" />
+              <span className="sr-only">Cancel</span>
+            </>
           ) : (
             <>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit title
+              <Pencil className="h-4 w-4" />
+              <span className="sr-only">Edit title</span>
             </>
           )}
         </Button>

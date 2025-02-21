@@ -1,39 +1,45 @@
 "use client";
 
-import { updateCourseDescription } from "@/app/(front)/(dashboard)/teacher/actions";
-import { courseDescriptionSchema, CourseDescriptionType } from "@/lib/schemas";
+import { updateCourseCategory } from "@/app/(front)/(dashboard)/teacher/actions";
+import { CourseCategoryType, courseCategorySchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Course } from "@prisma/client";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { Combobox } from "../ui/combobox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { Textarea } from "../ui/textarea";
 
-interface DescriptionFormProps {
-  initialData: {
-    description: string | null;
-  };
+interface CategoryFormProps {
+  initialData: Course;
   courseId: string;
+  options?: {
+    value: string;
+    label: string;
+  }[];
 }
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const CategoryForm = ({
+  initialData,
+  courseId,
+  options,
+}: CategoryFormProps) => {
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseDescriptionType>({
-    resolver: zodResolver(courseDescriptionSchema),
+  const form = useForm<CourseCategoryType>({
+    resolver: zodResolver(courseCategorySchema),
     defaultValues: {
-      description: initialData.description || "",
+      categoryId: initialData.categoryId || "",
     },
   });
 
@@ -41,15 +47,15 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseDescriptionType) => {
+  const onSubmit = async (values: CourseCategoryType) => {
     try {
       console.log(values);
-      const answer = await updateCourseDescription(values, courseId);
+      const answer = await updateCourseCategory(values, courseId);
 
       toggleEdit();
 
       if (answer) {
-        toast.success("Course description updated.");
+        toast.success("Course category updated.");
         router.push(`/teacher/courses/${answer.slug}`);
       }
     } catch (error) {
@@ -57,28 +63,33 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
       toast.error("Something went wrong. Please try again.");
     }
   };
+
+  const selectedOption = options?.find(
+    (option) => option.value === initialData.categoryId,
+  );
+
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Description:</span>
+        <span className="text-sm text-muted-foreground">Category:</span>
         <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {isEditing ? (
             <>
               <X className="h-4 w-4" />
-              <span className="sr-only">Cancel</span>
+              <span className="sr-only">Edit</span>
             </>
           ) : (
             <>
               <Pencil className="h-4 w-4" />
-              <span className="sr-only">Edit description</span>
+              <span className="sr-only">Edit</span>
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <span className="w-full font-serif text-sm italic">
-          {initialData.description || "No description"}
+        <span className="w-full text-lg">
+          {selectedOption?.label || "No category"}
         </span>
       )}
 
@@ -90,19 +101,12 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           >
             <FormField
               control={form.control}
-              name="description"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
-                      {...field}
-                    />
+                    <Combobox options={options!} {...field} />
                   </FormControl>
-                  <FormDescription>
-                    Describe in detail what will be taught in this course.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -119,4 +123,4 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   );
 };
 
-export default DescriptionForm;
+export default CategoryForm;
