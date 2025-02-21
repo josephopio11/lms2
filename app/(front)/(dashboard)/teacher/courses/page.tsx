@@ -5,6 +5,7 @@ import { getAllCourses } from "../actions";
 
 const CoursesPage = async () => {
   const courses = await getAllCourses();
+
   return (
     <>
       <PageHeader title="Courses" />
@@ -23,6 +24,7 @@ const CoursesPage = async () => {
           </div>
           <pre>{JSON.stringify(courses, null, 2)}</pre>
         </div>
+        c
       </div>
     </>
   );

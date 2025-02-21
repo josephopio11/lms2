@@ -1,19 +1,11 @@
 "use client";
 
-import { courseImageSchema, CourseImageType } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { writeFileNameToDatabase } from "@/app/(front)/(dashboard)/teacher/actions";
 import { Course } from "@prisma/client";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
 import { Input } from "../ui/input";
 
 interface ImageUploadFormProps {
@@ -24,19 +16,39 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
   // const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseImageType>({
-    resolver: zodResolver(courseImageSchema),
-    defaultValues: {
-      imageUrl: initialData.imageUrl || "",
-    },
-  });
+
+  const [file, setFile] = useState<File>();
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  const { isSubmitting, isValid } = form.formState;
+  // const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = (values: CourseImageType) => {
-    console.log(values);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!file) return;
+
+    try {
+      const data = new FormData();
+      data.set("file", file);
+
+      const res = await fetch(`/api/imgeupload`, {
+        method: "POST",
+        body: data,
+      });
+
+      if (!res.ok) throw new Error("Something went wrong. Please try again.");
+
+      const result = await res.json();
+      console.log(result);
+      await writeFileNameToDatabase(
+        "/uploads/" + result.fileName,
+        initialData.id,
+        initialData.slug,
+      );
+      setIsEditing(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="flex flex-col items-center font-medium">
@@ -61,43 +73,43 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
 
       {!isEditing &&
         (!initialData.imageUrl ? (
-          <div className="flex aspect-video h-60 items-center justify-center rounded-md bg-slate-200 dark:bg-slate-800">
+          <div className="flex aspect-video w-full items-center justify-center rounded-md bg-slate-200 dark:bg-slate-800">
             <ImageIcon className="h-10 w-10 text-muted-foreground" />
           </div>
         ) : (
-          <></>
+          <div></div>
         ))}
 
       {isEditing && (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-4"
-          >
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
+        <form
+          onSubmit={onSubmit}
+          className="flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-md border bg-primary-foreground text-xs text-muted-foreground"
+        >
+          <Input
+            type="file"
+            accept="image/*"
+            name="file"
+            onChange={(e) => {
+              setFile(e.target.files?.[0]);
+            }}
+            className="aspect-video w-2/3"
+            id="file"
+            multiple={false}
+          />
+          <span>16:9 aspect ratio recommended</span>
+          <Button type="submit">Upload</Button>
+        </form>
+      )}
+      {!isEditing && initialData.imageUrl && (
+        <div className="flex aspect-video w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-md border bg-primary-foreground text-xs text-muted-foreground">
+          <Image
+            src={initialData.imageUrl}
+            alt={initialData.title}
+            width={500}
+            height={500}
+            className="aspect-video w-full object-cover"
+          />
+        </div>
       )}
     </div>
   );
