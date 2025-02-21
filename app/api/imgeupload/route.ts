@@ -1,14 +1,26 @@
 import { sluggify } from "@/lib/utils";
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, unlink } from "fs";
 import { writeFile } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const data = await req.formData();
   const file: File | null = data.get("file") as File;
+  const oldFile: string | null = data.get("oldFile") as string;
 
   if (!file) {
     return NextResponse.json({ success: false, status: 400 });
+  }
+
+  if (oldFile) {
+    try {
+      await unlink(`public/${oldFile}`, (err) => {
+        if (err) throw err;
+        console.log(oldFile + " was deleted");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const bytes = await file.arrayBuffer();
@@ -17,8 +29,6 @@ export async function POST(req: NextRequest) {
   const fileExtension = file.name.split(".").pop();
 
   const fileName = `${sluggify(todayDate.toISOString())}.${fileExtension}`;
-
-  console.log({ fileName });
 
   const path = `public/uploads/${fileName}`;
   try {
@@ -31,8 +41,6 @@ export async function POST(req: NextRequest) {
 
   try {
     await writeFile(path, buffer);
-    // console.log({ message: "File uploaded successfully", path });
-    // console.log({ success: true, status: 200 });
     return NextResponse.json({ success: true, status: 200, fileName });
   } catch (error) {
     console.log(error);

@@ -24,7 +24,6 @@ const CoursesPage = async () => {
           </div>
           <pre>{JSON.stringify(courses, null, 2)}</pre>
         </div>
-        c
       </div>
     </>
   );

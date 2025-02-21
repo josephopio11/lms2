@@ -56,7 +56,7 @@ export async function createCourseTitle(values: CourseTitleType) {
     return created;
   } catch (error) {
     console.log(error);
-    return;
+    return null;
   }
 }
 

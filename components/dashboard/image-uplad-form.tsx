@@ -13,7 +13,7 @@ interface ImageUploadFormProps {
 }
 
 const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
-  // const router = useRouter();
+  const originalImage = initialData.imageUrl;
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -30,6 +30,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
     try {
       const data = new FormData();
       data.set("file", file);
+      data.set("oldFile", originalImage || "");
 
       const res = await fetch(`/api/imgeupload`, {
         method: "POST",
@@ -39,7 +40,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
       if (!res.ok) throw new Error("Something went wrong. Please try again.");
 
       const result = await res.json();
-      console.log(result);
+
       await writeFileNameToDatabase(
         "/uploads/" + result.fileName,
         initialData.id,
@@ -85,6 +86,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
           onSubmit={onSubmit}
           className="flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-md border bg-primary-foreground text-xs text-muted-foreground"
         >
+          <input type="hidden" name="oldFile" value={originalImage as string} />
           <Input
             type="file"
             accept="image/*"
