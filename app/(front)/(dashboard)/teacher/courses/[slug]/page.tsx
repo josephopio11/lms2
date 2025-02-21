@@ -1,4 +1,5 @@
 import CategoryForm from "@/components/dashboard/category-form";
+import ChaptersForm from "@/components/dashboard/chapters-form";
 import PageHeader from "@/components/dashboard/dash-page-header";
 import DescriptionForm from "@/components/dashboard/description-form";
 import ImageUploadForm from "@/components/dashboard/image-uplad-form";
@@ -89,10 +90,10 @@ const CoursePage = async ({ params }: PageProps) => {
           </div>
           <div className="space-y-4 rounded-xl xl:col-span-2">
             <div className="col-span-2 rounded-xl bg-muted/50 p-4">
-              <PriceForm initialData={course} courseId={course.id} />
+              <ChaptersForm initialData={course} courseId={course.id} />
             </div>
             <div className="col-span-2 rounded-xl bg-muted/50 p-4">
-              <TitleForm initialData={course} courseId={course.id} />
+              <PriceForm initialData={course} courseId={course.id} />
             </div>
             This is another one
           </div>
