@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import LoadingButton from "../loading-button";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -108,9 +109,13 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <LoadingButton
+                pending={!isValid || isSubmitting}
+                size="sm"
+                type="submit"
+              >
                 Save
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>

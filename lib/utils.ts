@@ -22,8 +22,8 @@ export function sluggify(str: string) {
 }
 
 export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-MY", {
+  return new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: "INR",
+    currency: "gbp",
   }).format(amount);
 }

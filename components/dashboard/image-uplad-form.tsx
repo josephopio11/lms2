@@ -6,6 +6,7 @@ import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
+import LoadingButton from "../loading-button";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -49,6 +50,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
         initialData.slug,
       );
       setIsEditing(false);
+      setFile(undefined);
       toast.success("Course image updated.");
     } catch (error) {
       console.log(error);
@@ -105,8 +107,12 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
               name="oldFile"
               value={originalImage as string}
             />
-            <Label htmlFor="file">
-              <Upload className="h-14 w-14 text-muted-foreground" />
+            <Label htmlFor="file" className="cursor-pointer">
+              {file ? (
+                <>Selected file: {file.name}</>
+              ) : (
+                <Upload className="h-14 w-14 text-muted-foreground" />
+              )}
             </Label>
             <Input
               type="file"
@@ -121,9 +127,9 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
               hidden
             />
             <span>16:9 aspect ratio recommended</span>
-            <Button type="submit" className="text-white">
+            <LoadingButton size="sm" type="submit" pending={false}>
               Upload
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       )}

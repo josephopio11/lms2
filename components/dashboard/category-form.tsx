@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import LoadingButton from "../loading-button";
 import { Button } from "../ui/button";
 import { Combobox } from "../ui/combobox";
 import {
@@ -112,9 +113,13 @@ const CategoryForm = ({
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <LoadingButton
+                size="sm"
+                pending={!isValid || isSubmitting}
+                type="submit"
+              >
                 Save
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>

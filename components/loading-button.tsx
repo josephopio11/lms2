@@ -3,12 +3,21 @@ import { Button } from "@/components/ui/button";
 export default function LoadingButton({
   pending,
   children,
+  type,
+  size,
 }: {
   pending: boolean;
   children: React.ReactNode;
+  type?: "button" | "submit" | "reset" | undefined;
+  size?: "default" | "sm" | "lg" | "icon";
 }) {
   return (
-    <Button className="w-full" type="submit" disabled={pending}>
+    <Button
+      className="w-full text-white"
+      type={type || "submit"}
+      disabled={pending}
+      size={size}
+    >
       {pending ? (
         <div className="flex items-center justify-center">
           <svg

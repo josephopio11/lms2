@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import LoadingButton from "../loading-button";
 
 interface PriceFormProps {
   initialData: {
@@ -111,13 +112,13 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button
+              <LoadingButton
                 size={"sm"}
-                disabled={!isValid || isSubmitting}
+                pending={!isValid || isSubmitting}
                 type="submit"
               >
                 Save
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>
