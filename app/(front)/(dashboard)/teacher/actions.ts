@@ -41,7 +41,24 @@ export async function getCourseBySlug(slug: string) {
   const userId = session.user.id;
   if (!userId) return;
 
-  const course = db.course.findUnique({ where: { slug } });
+  const course = db.course.findUnique({
+    where: {
+      slug,
+      userId,
+    },
+    include: {
+      chapters: {
+        orderBy: {
+          position: "asc",
+        },
+      },
+      attachments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
 
   return course;
 }
@@ -132,9 +149,13 @@ export async function updateCoursePrice(values: CoursePriceType, id: string) {
   if (!session?.user) return;
   if (!id) return;
 
-  const price = values.price;
+  var price = values.price as number | undefined;
 
-  if (!price) return;
+  console.log(price);
+
+  if (!price || isNaN(price) || price < 1 || price === undefined) {
+    price = 0;
+  }
 
   try {
     const result = await db.course.update({

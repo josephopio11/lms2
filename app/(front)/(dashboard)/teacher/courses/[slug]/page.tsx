@@ -26,7 +26,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
   const { slug } = await params;
   const { course } = await getCachedPageStuff(slug);
   return {
-    title: course?.title || "Course",
+    title: "Editing - " + course?.title || "Course",
   };
 };
 
@@ -42,6 +42,7 @@ const CoursePage = async ({ params }: PageProps) => {
     course.imageUrl,
     course.price,
     course.categoryId,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;

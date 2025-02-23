@@ -1,8 +1,9 @@
 "use client";
 
-import { updateCourseDescription } from "@/app/(front)/(dashboard)/teacher/actions";
-import { courseDescriptionSchema, CourseDescriptionType } from "@/lib/schemas";
+import { updateCourseTitle } from "@/app/(front)/(dashboard)/teacher/actions";
+import { courseTitleSchema, CourseTitleType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Course } from "@prisma/client";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -20,33 +21,36 @@ import {
 import { Textarea } from "../ui/textarea";
 
 interface ChaptersFormProps {
-  initialData: {
-    description: string | null;
-  };
+  initialData: Course;
   courseId: string;
 }
 
 const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
-  const router = useRouter();
-
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseDescriptionType>({
-    resolver: zodResolver(courseDescriptionSchema),
+
+  const form = useForm<CourseTitleType>({
+    resolver: zodResolver(courseTitleSchema),
     defaultValues: {
-      description: initialData.description || "",
+      title: "",
     },
   });
 
-  const toggleEdit = () => setIsEditing(!isEditing);
+  const router = useRouter();
+
+  const toggleCreate = () => setIsCreating(!isCreating);
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseDescriptionType) => {
+  const toggleEdit = () => setIsUpdating(!isUpdating);
+
+  const onSubmit = async (values: CourseTitleType) => {
     try {
       console.log(values);
-      const answer = await updateCourseDescription(values, courseId);
+      const answer = await updateCourseTitle(values, courseId);
 
-      toggleEdit();
+      toggleCreate();
 
       if (answer) {
         toast.success("Course description updated.");
@@ -57,6 +61,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       toast.error("Something went wrong. Please try again.");
     }
   };
+
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
@@ -90,7 +95,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           >
             <FormField
               control={form.control}
-              name="description"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>

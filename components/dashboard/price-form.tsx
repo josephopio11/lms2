@@ -99,8 +99,8 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
                       disabled={isSubmitting}
                       placeholder="e.g. 'Advanced web development'"
                       {...field}
-                      type="number"
                       min={0}
+                      step={0.01}
                     />
                   </FormControl>
                   <FormDescription>

@@ -2,12 +2,13 @@
 
 import { writeFileNameToDatabase } from "@/app/(front)/(dashboard)/teacher/actions";
 import { Course } from "@prisma/client";
-import { ImageIcon, Pencil, PlusCircle, X } from "lucide-react";
+import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 interface ImageUploadFormProps {
   initialData: Course;
@@ -104,6 +105,9 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
               name="oldFile"
               value={originalImage as string}
             />
+            <Label htmlFor="file">
+              <Upload className="h-14 w-14 text-muted-foreground" />
+            </Label>
             <Input
               type="file"
               accept="image/*"
@@ -111,9 +115,10 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
               onChange={(e) => {
                 setFile(e.target.files?.[0]);
               }}
-              className="aspect-video w-2/3"
+              className="hidden aspect-video w-2/3"
               id="file"
               multiple={false}
+              hidden
             />
             <span>16:9 aspect ratio recommended</span>
             <Button type="submit" className="text-white">
