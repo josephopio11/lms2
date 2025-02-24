@@ -43,3 +43,24 @@ export async function handleCreateChapter(
 
   return chapter;
 }
+
+export async function reorderChapters(
+  list: { id: string; position: number }[],
+) {
+  console.log(list);
+
+  if (!list) return { success: false };
+
+  list.map(
+    async (item) =>
+      await db.chapter.update({
+        where: {
+          id: item.id,
+        },
+        data: {
+          position: item.position,
+        },
+      }),
+  );
+  return { success: true };
+}

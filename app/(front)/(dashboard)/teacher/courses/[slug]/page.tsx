@@ -61,8 +61,8 @@ const CoursePage = async ({ params }: PageProps) => {
         title2={course?.title}
       />
       <div className="flex flex-1 flex-col gap-4 p-4 sm:pt-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3 xl:grid-cols-4">
-          <div className="rounded-xl bg-muted/50 p-4 sm:col-span-3 xl:col-span-4">
+        <div className="grid auto-rows-min gap-4 md:grid-cols-2">
+          <div className="rounded-xl bg-muted/50 p-4 sm:col-span-2 xl:col-span-4">
             <h1 className="text-2xl font-medium">Course setup</h1>
             <p className="text-sm text-muted-foreground">
               What would you like to call this course? You can always change
@@ -71,7 +71,7 @@ const CoursePage = async ({ params }: PageProps) => {
             <span>Complete all fields {completionText}</span>
             <ProgressBar level={completionRate} className="w-full" />
           </div>
-          <div className="space-y-4 sm:col-span-2 xl:col-span-2">
+          <div className="space-y-4 sm:col-span-1">
             <div className="col-span-2 rounded-xl bg-muted/50 p-4">
               <TitleForm initialData={course} courseId={course.id} />
             </div>
@@ -92,11 +92,11 @@ const CoursePage = async ({ params }: PageProps) => {
               />
             </div>
           </div>
-          <div className="space-y-4 rounded-xl xl:col-span-2">
-            <div className="col-span-2 rounded-xl bg-muted/50 p-4">
+          <div className="space-y-4 rounded-xl sm:col-span-1">
+            <div className="rounded-xl bg-muted/50 p-4">
               <ChaptersForm initialData={course} courseId={course.id} />
             </div>
-            <div className="col-span-2 rounded-xl bg-muted/50 p-4">
+            <div className="rounded-xl bg-muted/50 p-4">
               {/* TODO: Fix the issues with price */}
               <PriceForm
                 initialData={{ price: course.price ?? 0 }}
