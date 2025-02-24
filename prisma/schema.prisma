@@ -269,6 +269,7 @@ model Purchase {
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
+  @@map("purchases")
 }
 
 model Customer {
@@ -278,4 +279,6 @@ model Customer {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("customers")
 }

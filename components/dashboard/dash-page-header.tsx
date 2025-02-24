@@ -54,7 +54,9 @@ const PageHeader = ({
                 <BreadcrumbItem>
                   <BreadcrumbLink href={link2}>
                     <BreadcrumbPage className="capitalize">
-                      {title2.slice(0, 35)}...
+                      {title2.length > 35
+                        ? title2.slice(0, 35) + "..."
+                        : title2}
                     </BreadcrumbPage>
                   </BreadcrumbLink>
                 </BreadcrumbItem>

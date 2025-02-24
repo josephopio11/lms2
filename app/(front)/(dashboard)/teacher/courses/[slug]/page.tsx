@@ -1,3 +1,7 @@
+import {
+  getAllCourseCategories,
+  getCourseBySlug,
+} from "@/app/(front)/actions/course";
 import CategoryForm from "@/components/dashboard/category-form";
 import ChaptersForm from "@/components/dashboard/chapters-form";
 import PageHeader from "@/components/dashboard/dash-page-header";
@@ -8,7 +12,6 @@ import { ProgressBar } from "@/components/dashboard/progress-bar";
 import TitleForm from "@/components/dashboard/title-form";
 import { redirect } from "next/navigation";
 import { cache } from "react";
-import { getAllCourseCategories, getCourseBySlug } from "../../actions";
 
 type PageProps = {
   params: {
@@ -94,9 +97,12 @@ const CoursePage = async ({ params }: PageProps) => {
               <ChaptersForm initialData={course} courseId={course.id} />
             </div>
             <div className="col-span-2 rounded-xl bg-muted/50 p-4">
-              <PriceForm initialData={course} courseId={course.id} />
+              {/* TODO: Fix the issues with price */}
+              <PriceForm
+                initialData={{ price: course.price ?? 0 }}
+                courseId={course.id}
+              />
             </div>
-            This is another one
           </div>
         </div>
       </div>

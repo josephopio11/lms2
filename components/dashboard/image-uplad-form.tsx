@@ -1,6 +1,6 @@
 "use client";
 
-import { writeFileNameToDatabase } from "@/app/(front)/(dashboard)/teacher/actions";
+import { writeFileNameToDatabase } from "@/app/(front)/actions/course";
 import { Course } from "@prisma/client";
 import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
 import Image from "next/image";
@@ -109,7 +109,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
             />
             <Label htmlFor="file" className="cursor-pointer">
               {file ? (
-                <>Selected file: {file.name}</>
+                <span className="text-center">Selected file: {file.name}</span>
               ) : (
                 <Upload className="h-14 w-14 text-muted-foreground" />
               )}
@@ -126,10 +126,18 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
               multiple={false}
               hidden
             />
-            <span>16:9 aspect ratio recommended</span>
-            <LoadingButton size="sm" type="submit" pending={false}>
-              Upload
-            </LoadingButton>
+            <span className="text-center">
+              Select an image to upload.
+              <br />
+              16:9 aspect ratio recommended
+            </span>
+            {file && (
+              <>
+                <LoadingButton size="sm" type="submit" pending={false}>
+                  Upload
+                </LoadingButton>
+              </>
+            )}
           </div>
         </form>
       )}

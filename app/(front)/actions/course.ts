@@ -149,7 +149,7 @@ export async function updateCoursePrice(values: CoursePriceType, id: string) {
   if (!session?.user) return;
   if (!id) return;
 
-  var price = values.price as number | undefined;
+  let price = values.price as number | undefined;
 
   console.log(price);
 

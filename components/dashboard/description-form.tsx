@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCourseDescription } from "@/app/(front)/(dashboard)/teacher/actions";
+import { updateCourseDescription } from "@/app/(front)/actions/course";
 import { courseDescriptionSchema, CourseDescriptionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, X } from "lucide-react";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import LoadingButton from "../loading-button";
+import LoadingButton2 from "../loading-button2";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -109,13 +109,13 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <LoadingButton
+              <LoadingButton2
                 pending={!isValid || isSubmitting}
                 size="sm"
                 type="submit"
               >
                 Save
-              </LoadingButton>
+              </LoadingButton2>
             </div>
           </form>
         </Form>

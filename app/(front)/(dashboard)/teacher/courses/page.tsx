@@ -1,9 +1,9 @@
+import { getAllCourses } from "@/app/(front)/actions/course";
 import PageHeader from "@/components/dashboard/dash-page-header";
 import StatCard from "@/components/dashboard/stat-card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Grid, School } from "lucide-react";
 import Link from "next/link";
-import { getAllCourses } from "../actions";
 
 export const generateMetadata = () => ({
   title: "Courses",

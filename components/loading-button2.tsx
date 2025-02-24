@@ -13,7 +13,7 @@ export default function LoadingButton2({
 }) {
   return (
     <Button
-      className="w-full text-white"
+      className="ml-auto text-white"
       type={type || "submit"}
       disabled={pending}
       size={size}

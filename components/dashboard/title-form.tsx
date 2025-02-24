@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCourseTitle } from "@/app/(front)/(dashboard)/teacher/actions";
+import { updateCourseTitle } from "@/app/(front)/actions/course";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import LoadingButton from "../loading-button";
+import LoadingButton2 from "../loading-button2";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -105,13 +105,13 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
               )}
             />
             <div className="flex items-center gap-x-2">
-              <LoadingButton
+              <LoadingButton2
                 pending={!isValid || isSubmitting}
                 size="sm"
                 type="submit"
               >
                 Save
-              </LoadingButton>
+              </LoadingButton2>
             </div>
           </form>
         </Form>

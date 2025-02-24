@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { createCourseTitle } from "../actions";
+import { createCourseTitle } from "../../../actions/course";
 
 const CourseName = () => {
   const router = useRouter();

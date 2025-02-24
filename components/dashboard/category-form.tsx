@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCourseCategory } from "@/app/(front)/(dashboard)/teacher/actions";
+import { updateCourseCategory } from "@/app/(front)/actions/course";
 import { CourseCategoryType, courseCategorySchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Course } from "@prisma/client";
@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import LoadingButton from "../loading-button";
+import LoadingButton2 from "../loading-button2";
 import { Button } from "../ui/button";
 import { Combobox } from "../ui/combobox";
 import {
@@ -113,13 +113,13 @@ const CategoryForm = ({
               )}
             />
             <div className="flex items-center gap-x-2">
-              <LoadingButton
+              <LoadingButton2
                 size="sm"
                 pending={!isValid || isSubmitting}
                 type="submit"
               >
                 Save
-              </LoadingButton>
+              </LoadingButton2>
             </div>
           </form>
         </Form>

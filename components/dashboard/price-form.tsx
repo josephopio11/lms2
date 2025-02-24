@@ -1,6 +1,6 @@
 "use client";
 
-import { updateCoursePrice } from "@/app/(front)/(dashboard)/teacher/actions";
+import { updateCoursePrice } from "@/app/(front)/actions/course";
 import { coursePriceSchema, CoursePriceType } from "@/lib/schemas";
 import { formatCurrency } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import LoadingButton from "../loading-button";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -19,7 +20,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import LoadingButton from "../loading-button";
 
 interface PriceFormProps {
   initialData: {
