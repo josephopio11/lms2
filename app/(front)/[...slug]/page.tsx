@@ -1,4 +1,4 @@
-import PageHeader from "@/components/dashboard/dash-page-header";
+import PageHeader from "@/components/dashboard/course/dash-page-header";
 
 type Props = {
   params: {

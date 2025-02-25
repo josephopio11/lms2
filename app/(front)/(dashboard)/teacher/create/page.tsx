@@ -1,4 +1,4 @@
-import PageHeader from "@/components/dashboard/dash-page-header";
+import PageHeader from "@/components/dashboard/course/dash-page-header";
 import CourseName from "./CourseName";
 
 export const generateMetadata = () => ({

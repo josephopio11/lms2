@@ -6,10 +6,10 @@ import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import LoadingButton from "../loading-button";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import LoadingButton from "../../loading-button";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 
 interface ImageUploadFormProps {
   initialData: Course;

@@ -10,8 +10,8 @@ import {
 import { Chapter } from "@prisma/client";
 import { Grip, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
 
 interface ChaptersListProps {
   onEdit: (id: string) => void;

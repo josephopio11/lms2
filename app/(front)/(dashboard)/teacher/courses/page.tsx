@@ -1,6 +1,6 @@
 import { getAllCourses } from "@/app/(front)/actions/course";
-import PageHeader from "@/components/dashboard/dash-page-header";
-import StatCard from "@/components/dashboard/stat-card";
+import PageHeader from "@/components/dashboard/course/dash-page-header";
+import StatCard from "@/components/dashboard/course/stat-card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Grid, School } from "lucide-react";
 import Link from "next/link";

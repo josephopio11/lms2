@@ -2,14 +2,14 @@ import {
   getAllCourseCategories,
   getCourseById,
 } from "@/app/(front)/actions/course";
-import CategoryForm from "@/components/dashboard/category-form";
-import ChaptersForm from "@/components/dashboard/chapters-form";
-import PageHeader from "@/components/dashboard/dash-page-header";
-import DescriptionForm from "@/components/dashboard/description-form";
-import ImageUploadForm from "@/components/dashboard/image-uplad-form";
-import PriceForm from "@/components/dashboard/price-form";
-import { ProgressBar } from "@/components/dashboard/progress-bar";
-import TitleForm from "@/components/dashboard/title-form";
+import CategoryForm from "@/components/dashboard/course/category-form";
+import ChaptersForm from "@/components/dashboard/course/chapters-form";
+import PageHeader from "@/components/dashboard/course/dash-page-header";
+import DescriptionForm from "@/components/dashboard/course/description-form";
+import ImageUploadForm from "@/components/dashboard/course/image-uplad-form";
+import PriceForm from "@/components/dashboard/course/price-form";
+import { ProgressBar } from "@/components/dashboard/course/progress-bar";
+import TitleForm from "@/components/dashboard/course/title-form";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
