@@ -57,7 +57,7 @@ const CategoryForm = ({
 
       if (answer) {
         toast.success("Course category updated.");
-        router.push(`/teacher/courses/${answer.slug}`);
+        router.push(`/teacher/courses/${answer.id}`);
       }
     } catch (error) {
       console.log(error);

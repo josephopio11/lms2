@@ -63,6 +63,34 @@ export async function getCourseBySlug(slug: string) {
   return course;
 }
 
+export async function getCourseById(id: string) {
+  const session = await auth();
+  if (!session?.user) return;
+  const userId = session.user.id;
+  if (!userId) return;
+
+  const course = db.course.findUnique({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      chapters: {
+        orderBy: {
+          position: "asc",
+        },
+      },
+      attachments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  return course;
+}
+
 export async function createCourseTitle(values: CourseTitleType) {
   const session = await auth();
   if (!session?.user) return;

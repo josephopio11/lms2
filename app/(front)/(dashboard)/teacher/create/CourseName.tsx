@@ -33,7 +33,7 @@ const CourseName = () => {
       const answer = await createCourseTitle(values);
 
       if (answer) {
-        router.push(`/teacher/courses/${answer.slug}`);
+        router.push(`/teacher/courses/${answer.id}`);
       }
     } catch (error) {
       console.log("Something went wrong", error);

@@ -48,6 +48,7 @@ export async function reorderChapters(
   list: { id: string; position: number }[],
 ) {
   console.log(list);
+  // await new Promise((resolve) => setTimeout(resolve, 10000));
 
   if (!list) return { success: false };
 
@@ -63,4 +64,21 @@ export async function reorderChapters(
       }),
   );
   return { success: true };
+}
+
+export async function getChapterById(id: string, courseSlug: string) {
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: id,
+      course: {
+        slug: courseSlug,
+      },
+    },
+    include: {
+      muxData: true,
+      course: true,
+    },
+  });
+
+  return chapter;
 }

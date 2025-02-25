@@ -51,7 +51,7 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
       const answer = await updateCourseTitle(values, courseId);
 
       if (answer) {
-        router.push(`/teacher/courses/${answer.slug}`);
+        router.push(`/teacher/courses/${answer.id}`);
       }
       toast.success("Course title updated.");
     } catch (error) {

@@ -81,13 +81,13 @@ const ChaptersList = ({ onEdit, onReorder, items }: ChaptersListProps) => {
                   >
                     <div
                       className={cn(
-                        "rounded-l-md border-r border-r-slate-200 px-2 py-3 transition hover:bg-slate-300",
+                        "rounded-l-md border-r border-r-slate-200 px-2 py-3 transition hover:bg-slate-300 hover:text-black",
                         chapter.isPublished &&
                           "border-r-sky-200 hover:bg-sky-200",
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <Grip className="h-5 w-5" />
+                      <Grip className="h-5 w-5 hover:cursor-grab active:cursor-grabbing" />
                     </div>
                     {chapter.title}
                     <div className="ml-auto flex items-center gap-x-2 pr-2">

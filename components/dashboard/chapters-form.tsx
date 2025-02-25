@@ -49,7 +49,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
   const onSubmit = async (values: CourseTitleType) => {
     try {
-      console.log(values);
+      // console.log(values);
       const answer = await handleCreateChapter(values, courseId);
 
       toggleCreate();
@@ -75,7 +75,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       } else {
         throw new Error("Something terrible happenned");
       }
-      router.refresh();
+      router.push("/teacher/courses/" + initialData.id);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong.");
@@ -84,12 +84,16 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     }
   };
 
+  const onEdit = (id: string) => {
+    router.push(`/teacher/courses/${initialData.id}/chapters/${id}`);
+  };
+
   return (
     <div className="relative flex flex-col items-center font-medium">
       {isUpdating && (
         <div className="absolute z-50 block h-full w-full rounded-md backdrop-blur-sm">
           <div className="flex h-full w-full flex-col items-center justify-center">
-            <Loader2 className="h-28 w-28 animate-spin opacity-50" />
+            <Loader2 className="h-28 w-28 animate-spin text-black/50 dark:text-white/50" />
             <p>Rearranging Chapters</p>
           </div>
         </div>
@@ -160,7 +164,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           {/* TODO: Add a list of chapters. No chapters */}
           <div className="w-full">
             <ChaptersList
-              onEdit={() => {}}
+              onEdit={onEdit}
               onReorder={onReorder}
               items={initialData.chapters || []}
             />

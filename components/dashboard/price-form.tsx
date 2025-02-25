@@ -52,7 +52,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
 
       if (answer) {
         toast.success("Course price updated.");
-        router.push(`/teacher/courses/${answer.slug}`);
+        router.push(`/teacher/courses/${answer.id}`);
       }
     } catch (error) {
       console.log(error);

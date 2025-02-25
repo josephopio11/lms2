@@ -51,7 +51,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
       if (answer) {
         toast.success("Course description updated.");
-        router.push(`/teacher/courses/${answer.slug}`);
+        router.push(`/teacher/courses/${answer.id}`);
       }
     } catch (error) {
       console.log(error);
