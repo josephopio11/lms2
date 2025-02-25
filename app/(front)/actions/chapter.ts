@@ -2,7 +2,10 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { CourseAndChapterTitleType } from "@/lib/schemas";
+import {
+  CourseAndChapterDescriptionType,
+  CourseAndChapterTitleType,
+} from "@/lib/schemas";
 
 export async function handleCreateChapter(
   data: CourseAndChapterTitleType,
@@ -96,6 +99,25 @@ export async function updateChapterTitle(
     },
     data: {
       title,
+    },
+  });
+
+  return answer;
+}
+
+export async function updateChapterDescription(
+  values: CourseAndChapterDescriptionType,
+  chapterId: string,
+) {
+  console.log({ values, chapterId });
+  const { description } = values;
+
+  const answer = await db.chapter.update({
+    where: {
+      id: chapterId,
+    },
+    data: {
+      description,
     },
   });
 

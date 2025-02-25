@@ -1,15 +1,7 @@
 "use client";
 
 import { updateCourseDescription } from "@/app/(front)/actions/course";
-import { courseDescriptionSchema, CourseDescriptionType } from "@/lib/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import LoadingButton2 from "../../loading-button2";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,8 +9,19 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "../../ui/form";
-import { Textarea } from "../../ui/textarea";
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  courseAndChapterDescriptionSchema,
+  CourseAndChapterDescriptionType,
+} from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Pencil, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import LoadingButton2 from "../../loading-button2";
 
 interface DescriptionFormProps {
   initialData: {
@@ -31,8 +34,8 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseDescriptionType>({
-    resolver: zodResolver(courseDescriptionSchema),
+  const form = useForm<CourseAndChapterDescriptionType>({
+    resolver: zodResolver(courseAndChapterDescriptionSchema),
     defaultValues: {
       description: initialData.description || "",
     },
@@ -42,7 +45,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseDescriptionType) => {
+  const onSubmit = async (values: CourseAndChapterDescriptionType) => {
     try {
       console.log(values);
       const answer = await updateCourseDescription(values, courseId);

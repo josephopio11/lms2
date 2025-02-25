@@ -3,9 +3,9 @@
 import { auth } from "@/auth";
 import db from "@/lib/db";
 import {
+  CourseAndChapterDescriptionType,
   CourseAndChapterTitleType,
   CourseCategoryType,
-  CourseDescriptionType,
   CoursePriceType,
 } from "@/lib/schemas";
 import { sluggify } from "@/lib/utils";
@@ -158,7 +158,7 @@ export async function updateCourseTitle(
 }
 
 export async function updateCourseDescription(
-  values: CourseDescriptionType,
+  values: CourseAndChapterDescriptionType,
   id: string,
 ) {
   const session = await auth();

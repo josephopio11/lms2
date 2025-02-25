@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   DragDropContext,
@@ -10,8 +12,6 @@ import {
 import { Chapter } from "@prisma/client";
 import { Grip, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Badge } from "../../ui/badge";
-import { Button } from "../../ui/button";
 
 interface ChaptersListProps {
   onEdit: (id: string) => void;

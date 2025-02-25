@@ -4,6 +4,15 @@ import {
   handleCreateChapter,
   reorderChapters,
 } from "@/app/(front)/actions/chapter";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   courseAndChapterTitleSchema,
   CourseAndChapterTitleType,
@@ -17,15 +26,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import LoadingButton2 from "../../loading-button2";
-import { Button } from "../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
 import ChaptersList from "./chapters-list";
 
 interface ChaptersFormProps {

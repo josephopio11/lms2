@@ -1,46 +1,49 @@
 "use client";
 
-import { updateCourseCategory } from "@/app/(front)/actions/course";
+import { updateChapterDescription } from "@/app/(front)/actions/chapter";
 import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { CourseCategoryType, courseCategorySchema } from "@/lib/schemas";
+import {
+  courseAndChapterDescriptionSchema,
+  CourseAndChapterDescriptionType,
+} from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Course } from "@prisma/client";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import LoadingButton2 from "../../loading-button2";
+import MyRichTextEditor from "../editor";
+import { MyRichTextPreview } from "../preview";
 
-interface CategoryFormProps {
-  initialData: Course;
+interface ChapterDescriptionFormProps {
+  initialData: {
+    description: string | null;
+  };
   courseId: string;
-  options?: {
-    value: string;
-    label: string;
-  }[];
+  chapterId: string;
 }
 
-const CategoryForm = ({
+const ChapterDescriptionForm = ({
   initialData,
   courseId,
-  options,
-}: CategoryFormProps) => {
+  chapterId,
+}: ChapterDescriptionFormProps) => {
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseCategoryType>({
-    resolver: zodResolver(courseCategorySchema),
+  const form = useForm<CourseAndChapterDescriptionType>({
+    resolver: zodResolver(courseAndChapterDescriptionSchema),
     defaultValues: {
-      categoryId: initialData.categoryId || "",
+      description: initialData.description || "",
     },
   });
 
@@ -48,49 +51,49 @@ const CategoryForm = ({
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseCategoryType) => {
+  const onSubmit = async (values: CourseAndChapterDescriptionType) => {
     try {
       console.log(values);
-      const answer = await updateCourseCategory(values, courseId);
+      const answer = await updateChapterDescription(values, chapterId);
 
       toggleEdit();
 
       if (answer) {
-        toast.success("Course category updated.");
-        router.push(`/teacher/courses/${answer.id}`);
+        toast.success("Chapter description updated.");
+        router.push(
+          `/teacher/courses/${answer.courseId}/chapters/${answer.id}`,
+        );
       }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong. Please try again.");
     }
   };
-
-  const selectedOption = options?.find(
-    (option) => option.value === initialData.categoryId,
-  );
-
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Category:</span>
+        <span className="text-sm text-muted-foreground">Description:</span>
         <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {isEditing ? (
             <>
               <X className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Cancel</span>
             </>
           ) : (
             <>
               <Pencil className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Edit description</span>
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <span className="w-full text-lg">
-          {selectedOption?.label || "No category"}
+        <span className="w-full font-serif text-sm italic">
+          {!initialData.description && "No description"}
+          {initialData.description && (
+            <MyRichTextPreview value={initialData.description} />
+          )}
         </span>
       )}
 
@@ -102,20 +105,23 @@ const CategoryForm = ({
           >
             <FormField
               control={form.control}
-              name="categoryId"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox options={options!} {...field} />
+                    <MyRichTextEditor {...field} />
                   </FormControl>
+                  <FormDescription>
+                    Describe in detail what will be taught in this course.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex items-center gap-x-2">
               <LoadingButton2
-                size="sm"
                 pending={!isValid || isSubmitting}
+                size="sm"
                 type="submit"
               >
                 Save
@@ -128,4 +134,4 @@ const CategoryForm = ({
   );
 };
 
-export default CategoryForm;
+export default ChapterDescriptionForm;

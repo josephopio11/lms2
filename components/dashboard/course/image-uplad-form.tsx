@@ -1,15 +1,15 @@
 "use client";
 
 import { writeFileNameToDatabase } from "@/app/(front)/actions/course";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Course } from "@prisma/client";
 import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import LoadingButton from "../../loading-button";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
 
 interface ImageUploadFormProps {
   initialData: Course;

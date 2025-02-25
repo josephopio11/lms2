@@ -1,5 +1,6 @@
 import { getChapterById } from "@/app/(front)/actions/chapter";
 import { auth } from "@/auth";
+import ChapterDescriptionForm from "@/components/dashboard/chapter/description-form";
 import ChapterTitleForm from "@/components/dashboard/chapter/title-form";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
 import { ProgressBar } from "@/components/dashboard/course/progress-bar";
@@ -85,6 +86,10 @@ const SingleChapter = async ({ params }: PageProps) => {
             <ProgressBar level={completionRate} className="w-full" />
           </div>
           <div className="space-y-4 sm:col-span-1">
+            {/* <div className="flex items-center gap-x-2">
+              <IconBadge icon={LayoutDashboard} />
+              <h2 className="text-xl">Customise your chapter</h2>
+            </div> */}
             <div className="rounded-xl bg-muted/50 p-4">
               <ChapterTitleForm
                 initialData={chapter}
@@ -93,7 +98,11 @@ const SingleChapter = async ({ params }: PageProps) => {
               />
             </div>
             <div className="rounded-xl bg-muted/50 p-4">
-              {/* <DescriptionForm initialData={course} courseId={course.id} /> */}
+              <ChapterDescriptionForm
+                initialData={chapter}
+                chapterId={chapterId}
+                courseId={courseId}
+              />
             </div>
             <div className="rounded-xl bg-muted/50 p-4">
               {/* <ImageUploadForm initialData={course} /> */}

@@ -8,13 +8,15 @@ export type CourseAndChapterTitleType = z.infer<
   typeof courseAndChapterTitleSchema
 >;
 
-export const courseDescriptionSchema = z.object({
+export const courseAndChapterDescriptionSchema = z.object({
   description: z.string().min(1, {
     message: "Description is required",
   }),
 });
 
-export type CourseDescriptionType = z.infer<typeof courseDescriptionSchema>;
+export type CourseAndChapterDescriptionType = z.infer<
+  typeof courseAndChapterDescriptionSchema
+>;
 
 export const courseImageSchema = z.object({
   imageUrl: z.string().min(1, {
