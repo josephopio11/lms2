@@ -10,7 +10,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
 import {
   courseAndChapterDescriptionSchema,
   CourseAndChapterDescriptionType,
@@ -22,6 +21,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import LoadingButton2 from "../../loading-button2";
+import MyRichTextEditor from "../editor";
 
 interface DescriptionFormProps {
   initialData: {
@@ -82,7 +82,12 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
 
       {!isEditing && (
         <span className="w-full font-serif text-sm italic">
-          {initialData.description || "No description"}
+          <div
+            className="prose prose-sm dark:prose-invert jtextpreview w-full"
+            dangerouslySetInnerHTML={{
+              __html: initialData.description || "No description",
+            }}
+          />
         </span>
       )}
 
@@ -98,11 +103,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
-                      disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
-                      {...field}
-                    />
+                    <MyRichTextEditor {...field} />
                   </FormControl>
                   <FormDescription>
                     Describe in detail what will be taught in this course.

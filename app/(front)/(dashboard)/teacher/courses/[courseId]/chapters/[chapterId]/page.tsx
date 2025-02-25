@@ -1,5 +1,6 @@
 import { getChapterById } from "@/app/(front)/actions/chapter";
 import { auth } from "@/auth";
+import AccessForm from "@/components/dashboard/chapter/chapter-access-form";
 import ChapterDescriptionForm from "@/components/dashboard/chapter/description-form";
 import ChapterTitleForm from "@/components/dashboard/chapter/title-form";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
@@ -104,32 +105,23 @@ const SingleChapter = async ({ params }: PageProps) => {
                 courseId={courseId}
               />
             </div>
+          </div>
+
+          <div className="space-y-4 rounded-xl sm:col-span-1">
             <div className="rounded-xl bg-muted/50 p-4">
-              {/* <ImageUploadForm initialData={course} /> */}
+              <AccessForm
+                initialData={chapter}
+                chapterId={chapterId}
+                courseId={courseId}
+              />
             </div>
             <div className="rounded-xl bg-muted/50 p-4">
-              {/* <CategoryForm
-                initialData={course}
+              {/* <PriceForm
+                initialData={{ price: course.price ?? 0 }}
                 courseId={course.id}
-                options={categories?.map((category) => ({
-                  value: category.id,
-                  label: category.name,
-                }))}
               /> */}
             </div>
           </div>
-          {/* 
-          <div className="space-y-4 rounded-xl sm:col-span-1">
-            <div className="rounded-xl bg-muted/50 p-4">
-              <ChaptersForm initialData={course} courseId={course.id} />
-            </div>
-            <div className="rounded-xl bg-muted/50 p-4">
-              <PriceForm
-                initialData={{ price: course.price ?? 0 }}
-                courseId={course.id}
-              />
-            </div>
-          </div> */}
         </div>
       </div>
     </>

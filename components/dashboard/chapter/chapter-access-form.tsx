@@ -1,7 +1,8 @@
 "use client";
 
-import { updateChapterDescription } from "@/app/(front)/actions/chapter";
+import { chapterFreedom } from "@/app/(front)/actions/chapter";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -10,39 +11,35 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  courseAndChapterDescriptionSchema,
-  CourseAndChapterDescriptionType,
-} from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 import LoadingButton2 from "../../loading-button2";
-import MyRichTextEditor from "../editor";
 
-interface ChapterDescriptionFormProps {
+interface AccessFormProps {
   initialData: {
-    description: string | null;
+    isFree: boolean;
   };
   courseId: string;
   chapterId: string;
 }
 
-const ChapterDescriptionForm = ({
-  initialData,
-  courseId,
-  chapterId,
-}: ChapterDescriptionFormProps) => {
+const formSchema = z.object({
+  isFree: z.boolean().default(false),
+});
+
+const AccessForm = ({ initialData, courseId, chapterId }: AccessFormProps) => {
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<CourseAndChapterDescriptionType>({
-    resolver: zodResolver(courseAndChapterDescriptionSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData.description || "",
+      isFree: !!initialData.isFree,
     },
   });
 
@@ -50,15 +47,15 @@ const ChapterDescriptionForm = ({
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseAndChapterDescriptionType) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log(values);
-      const answer = await updateChapterDescription(values, chapterId);
+      const answer = await chapterFreedom(values, chapterId);
 
       toggleEdit();
 
       if (answer) {
-        toast.success("Chapter description updated.");
+        toast.success("Chapter updated.");
         router.push(
           `/teacher/courses/${answer.courseId}/chapters/${answer.id}`,
         );
@@ -71,7 +68,7 @@ const ChapterDescriptionForm = ({
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Description:</span>
+        <span className="text-sm text-muted-foreground">Access settings:</span>
         <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
           {isEditing ? (
             <>
@@ -81,21 +78,14 @@ const ChapterDescriptionForm = ({
           ) : (
             <>
               <Pencil className="h-4 w-4" />
-              <span className="sr-only">Edit description</span>
+              <span className="sr-only">Edit access settings</span>
             </>
           )}
         </Button>
       </div>
 
       {!isEditing && (
-        <span className="w-full rounded p-2 text-sm">
-          <div
-            className="prose prose-sm dark:prose-invert jtextpreview w-full"
-            dangerouslySetInnerHTML={{
-              __html: initialData.description || "No description",
-            }}
-          />
-        </span>
+        <span className="w-full rounded p-2 text-sm">{initialData.isFree}</span>
       )}
 
       {isEditing && (
@@ -106,15 +96,21 @@ const ChapterDescriptionForm = ({
           >
             <FormField
               control={form.control}
-              name="description"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <MyRichTextEditor {...field} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormDescription>
-                    Describe in detail what will be taught in this course.
-                  </FormDescription>
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                      Check this box if you want to make this chapter free for
+                      preview purposes.
+                    </FormDescription>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -135,4 +131,4 @@ const ChapterDescriptionForm = ({
   );
 };
 
-export default ChapterDescriptionForm;
+export default AccessForm;

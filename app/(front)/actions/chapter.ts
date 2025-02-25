@@ -123,3 +123,22 @@ export async function updateChapterDescription(
 
   return answer;
 }
+
+export async function chapterFreedom(
+  values: { isFree: boolean },
+  chapterId: string,
+) {
+  console.log({ values, chapterId });
+  const { isFree } = values;
+
+  const answer = await db.chapter.update({
+    where: {
+      id: chapterId,
+    },
+    data: {
+      isFree,
+    },
+  });
+
+  return answer;
+}

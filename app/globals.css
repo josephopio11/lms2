@@ -79,6 +79,10 @@ body {
   }
 }
 
+.jtextpreview {
+  width: 100% !important;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -87,8 +91,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-
 
 @layer base {
   * {

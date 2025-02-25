@@ -1,9 +1,8 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useMemo } from "react";
-
-import "react-quill/dist/quill.snow.css";
+import "quill/dist/quill.snow.css";
+import { useEffect, useState } from "react";
+import { useQuill } from "react-quilljs";
 
 interface EditorProps {
   value: string;
@@ -11,15 +10,24 @@ interface EditorProps {
 }
 
 export const MyRichTextEditor = ({ onChange, value }: EditorProps) => {
-  const ReactQuill = useMemo(
-    () =>
-      dynamic(() => import("react-quill"), {
-        ssr: false,
-      }),
-    [],
-  );
+  const { quill, quillRef } = useQuill();
+  const [content, setContent] = useState(value);
 
-  return <div className="bg-white">v </div>;
+  useEffect(() => {
+    if (quill) {
+      quill.clipboard.dangerouslyPasteHTML(content);
+      quill.on("text-change", () => {
+        const html = quill.root.innerHTML;
+        setContent(html);
+        onChange(html);
+      });
+    }
+  }, [quill]);
+  return (
+    <div className="bg-white dark:bg-black">
+      <div ref={quillRef} />
+    </div>
+  );
 };
 
 export default MyRichTextEditor;
