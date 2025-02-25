@@ -2,10 +2,10 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { CourseTitleType } from "@/lib/schemas";
+import { CourseAndChapterTitleType } from "@/lib/schemas";
 
 export async function handleCreateChapter(
-  data: CourseTitleType,
+  data: CourseAndChapterTitleType,
   courseId: string,
 ) {
   const session = await auth();
@@ -66,12 +66,12 @@ export async function reorderChapters(
   return { success: true };
 }
 
-export async function getChapterById(id: string, courseSlug: string) {
+export async function getChapterById(id: string, courseId: string) {
   const chapter = await db.chapter.findUnique({
     where: {
       id: id,
       course: {
-        slug: courseSlug,
+        id: courseId,
       },
     },
     include: {
@@ -81,4 +81,23 @@ export async function getChapterById(id: string, courseSlug: string) {
   });
 
   return chapter;
+}
+
+export async function updateChapterTitle(
+  values: CourseAndChapterTitleType,
+  chapterId: string,
+) {
+  console.log({ values, chapterId });
+  const { title } = values;
+
+  const answer = await db.chapter.update({
+    where: {
+      id: chapterId,
+    },
+    data: {
+      title,
+    },
+  });
+
+  return answer;
 }

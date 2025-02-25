@@ -10,7 +10,10 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { courseTitleSchema, CourseTitleType } from "@/lib/schemas";
+import {
+  courseAndChapterTitleSchema,
+  CourseAndChapterTitleType,
+} from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,8 +22,8 @@ import { createCourseTitle } from "../../../actions/course";
 
 const CourseName = () => {
   const router = useRouter();
-  const form = useForm<CourseTitleType>({
-    resolver: zodResolver(courseTitleSchema),
+  const form = useForm<CourseAndChapterTitleType>({
+    resolver: zodResolver(courseAndChapterTitleSchema),
     defaultValues: {
       title: "",
     },
@@ -28,7 +31,7 @@ const CourseName = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseTitleType) => {
+  const onSubmit = async (values: CourseAndChapterTitleType) => {
     try {
       const answer = await createCourseTitle(values);
 

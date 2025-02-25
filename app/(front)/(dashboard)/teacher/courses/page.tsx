@@ -1,8 +1,9 @@
 import { getAllCourses } from "@/app/(front)/actions/course";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
 import StatCard from "@/components/dashboard/course/stat-card";
+import { InfoCard } from "@/components/dashboard/info-card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Grid, School } from "lucide-react";
+import { BookOpenCheck, CheckCircle, School } from "lucide-react";
 import Link from "next/link";
 
 export const generateMetadata = () => ({
@@ -35,24 +36,29 @@ const CoursesPage = async () => {
       <PageHeader title="Courses" />
       <div className="flex flex-1 flex-col gap-4 p-4 sm:pt-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-4">
-          <StatCard
+          <InfoCard
             title="Total Courses"
             value={courses.length}
-            percentage={8}
+            description="The total number of courses you have created."
+            trendValue={-10}
             Icon={School}
           />
-          <StatCard
-            title="Total Courses"
-            value={courses.length}
-            percentage={16}
-            Icon={Grid}
+          <InfoCard
+            title="Published"
+            value={3}
+            description="Courses you have published this week"
+            Icon={BookOpenCheck}
+            trendValue={100}
           />
-          <StatCard
-            title="Total Courses"
-            value={courses.length}
-            percentage={3}
-            Icon={School}
+          <InfoCard
+            title="Purchased"
+            value={123}
+            description="Total number of courses purchased this month"
+            Icon={BookOpenCheck}
+            trendValue={132}
+            isCurrency
           />
+
           <StatCard
             title="Total Courses"
             value={courses.length}

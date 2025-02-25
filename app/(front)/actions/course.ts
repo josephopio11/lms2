@@ -3,10 +3,10 @@
 import { auth } from "@/auth";
 import db from "@/lib/db";
 import {
+  CourseAndChapterTitleType,
   CourseCategoryType,
   CourseDescriptionType,
   CoursePriceType,
-  CourseTitleType,
 } from "@/lib/schemas";
 import { sluggify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
@@ -27,6 +27,14 @@ export async function getAllCourses() {
       category: {
         select: {
           name: true,
+        },
+      },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
         },
       },
     },
@@ -91,7 +99,7 @@ export async function getCourseById(id: string) {
   return course;
 }
 
-export async function createCourseTitle(values: CourseTitleType) {
+export async function createCourseTitle(values: CourseAndChapterTitleType) {
   const session = await auth();
   if (!session?.user) return;
   const userId = session.user.id;
@@ -118,7 +126,10 @@ export async function createCourseTitle(values: CourseTitleType) {
   }
 }
 
-export async function updateCourseTitle(values: CourseTitleType, id: string) {
+export async function updateCourseTitle(
+  values: CourseAndChapterTitleType,
+  id: string,
+) {
   const session = await auth();
   if (!session?.user) return;
   const userId = session.user.id;

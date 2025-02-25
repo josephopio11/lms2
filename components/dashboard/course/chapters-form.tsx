@@ -4,7 +4,10 @@ import {
   handleCreateChapter,
   reorderChapters,
 } from "@/app/(front)/actions/chapter";
-import { courseTitleSchema, CourseTitleType } from "@/lib/schemas";
+import {
+  courseAndChapterTitleSchema,
+  CourseAndChapterTitleType,
+} from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chapter, Course } from "@prisma/client";
@@ -34,8 +37,8 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const form = useForm<CourseTitleType>({
-    resolver: zodResolver(courseTitleSchema),
+  const form = useForm<CourseAndChapterTitleType>({
+    resolver: zodResolver(courseAndChapterTitleSchema),
     defaultValues: {
       title: "",
     },
@@ -47,7 +50,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: CourseTitleType) => {
+  const onSubmit = async (values: CourseAndChapterTitleType) => {
     try {
       // console.log(values);
       const answer = await handleCreateChapter(values, courseId);

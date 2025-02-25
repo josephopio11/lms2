@@ -1,5 +1,6 @@
 import { getChapterById } from "@/app/(front)/actions/chapter";
 import { auth } from "@/auth";
+import ChapterTitleForm from "@/components/dashboard/chapter/title-form";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
 import { ProgressBar } from "@/components/dashboard/course/progress-bar";
 import { Button } from "@/components/ui/button";
@@ -11,20 +12,20 @@ import { cache } from "react";
 interface PageProps {
   params: {
     chapterId: string;
-    slug: string;
+    courseId: string;
   };
 }
 
 export const getCachedPageStuff = cache(
-  async (chapterId: string, slug: string) => {
-    const chapter = await getChapterById(chapterId, slug);
+  async (chapterId: string, courseId: string) => {
+    const chapter = await getChapterById(chapterId, courseId);
     return chapter;
   },
 );
 
 export const generateMetadata = async ({ params }: PageProps) => {
-  const { chapterId, slug } = await params;
-  const chapter = await getCachedPageStuff(chapterId, slug);
+  const { chapterId, courseId } = await params;
+  const chapter = await getCachedPageStuff(chapterId, courseId);
   return {
     title:
       "Editing: " + chapter?.title + " - " + chapter?.course?.title ||
@@ -36,13 +37,13 @@ const SingleChapter = async ({ params }: PageProps) => {
   const session = await auth();
   const userId = session?.user.id;
 
-  const { chapterId, slug } = await params;
+  const { chapterId, courseId } = await params;
 
   if (!userId) {
     return redirect("/login");
   }
 
-  const chapter = await getCachedPageStuff(chapterId, slug);
+  const chapter = await getCachedPageStuff(chapterId, courseId);
 
   if (!chapter) return redirect("/");
 
@@ -57,6 +58,7 @@ const SingleChapter = async ({ params }: PageProps) => {
     <>
       <PageHeader
         title={chapter.course.title}
+        link={`/teacher/courses/${chapter.course.id}`}
         title2={"Chapter: " + chapter?.title}
         title3="Editing"
       />
@@ -84,7 +86,11 @@ const SingleChapter = async ({ params }: PageProps) => {
           </div>
           <div className="space-y-4 sm:col-span-1">
             <div className="rounded-xl bg-muted/50 p-4">
-              {/* <TitleForm initialData={course} courseId={course.id} /> */}
+              <ChapterTitleForm
+                initialData={chapter}
+                // courseId={courseId}
+                chapterId={chapterId}
+              />
             </div>
             <div className="rounded-xl bg-muted/50 p-4">
               {/* <DescriptionForm initialData={course} courseId={course.id} /> */}

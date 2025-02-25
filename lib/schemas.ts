@@ -1,10 +1,12 @@
 import { z } from "zod";
 
-export const courseTitleSchema = z.object({
+export const courseAndChapterTitleSchema = z.object({
   title: z.string().min(1, "Title is required"),
 });
 
-export type CourseTitleType = z.infer<typeof courseTitleSchema>;
+export type CourseAndChapterTitleType = z.infer<
+  typeof courseAndChapterTitleSchema
+>;
 
 export const courseDescriptionSchema = z.object({
   description: z.string().min(1, {
