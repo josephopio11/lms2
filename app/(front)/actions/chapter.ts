@@ -146,3 +146,5 @@ export async function chapterFreedom(
 
   return answer;
 }
+
+export async function chapterPublish() {}

@@ -14,7 +14,6 @@ import {
   courseAndChapterDescriptionSchema,
   CourseAndChapterDescriptionType,
 } from "@/lib/schemas";
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -23,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import LoadingButton2 from "../../loading-button2";
 import MyRichTextEditor from "../editor";
+import HtmlRender from "../html-render";
 
 interface ChapterDescriptionFormProps {
   initialData: {
@@ -94,17 +94,7 @@ const ChapterDescriptionForm = ({
 
       {!isEditing && (
         <span className="w-full">
-          <div
-            className={cn(
-              "prose prose-sm mx-auto w-full max-w-prose font-sans dark:prose-invert lg:prose-lg prose-h2:font-medium prose-a:font-bold prose-a:italic prose-a:transition prose-a:duration-300 prose-a:ease-in-out hover:prose-a:text-red-700 prose-img:rounded-xl prose-img:shadow-lg prose-img:shadow-black/50 prose-img:transition-all prose-img:duration-300 prose-img:ease-in-out prose-img:hover:translate-y-1 sm:text-lg",
-              initialData.description
-                ? ""
-                : "font-serif italic text-muted-foreground",
-            )}
-            dangerouslySetInnerHTML={{
-              __html: initialData.description || "No description",
-            }}
-          />
+          <HtmlRender htmlText={initialData.description} />
         </span>
       )}
 

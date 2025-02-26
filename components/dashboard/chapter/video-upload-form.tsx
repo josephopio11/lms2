@@ -1,22 +1,23 @@
 "use client";
 
-import { writeImageNameToDatabase } from "@/app/(front)/actions/course";
+import { writeVideoNameToDatabase } from "@/app/(front)/actions/course";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Course } from "@prisma/client";
+import { Chapter, MuxData } from "@prisma/client";
 import { ImageIcon, Pencil, PlusCircle, Upload, X } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import LoadingButton from "../../loading-button";
 
-interface ImageUploadFormProps {
-  initialData: Course;
+interface VideoUploadFormProps {
+  initialData: Chapter & { muxData: MuxData | null };
+  courseId: string;
+  chapterId: string;
 }
 
-const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
-  const originalImage = initialData.imageUrl;
+const VideoUploadForm = ({ initialData }: VideoUploadFormProps) => {
+  const originalVideo = initialData.videoUrl;
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -33,9 +34,9 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
     try {
       const data = new FormData();
       data.set("file", file);
-      data.set("oldFile", originalImage || "");
+      data.set("oldFile", originalVideo || "");
 
-      const res = await fetch(`/api/imgeupload`, {
+      const res = await fetch(`/api/videoupload`, {
         method: "POST",
         body: data,
       });
@@ -44,10 +45,10 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
 
       const result = await res.json();
 
-      await writeImageNameToDatabase(
-        "/uploads/" + result.fileName,
+      await writeVideoNameToDatabase(
+        "/uploads/videos/" + result.fileName,
         initialData.id,
-        initialData.slug,
+        initialData.courseId,
       );
       setIsEditing(false);
       setFile(undefined);
@@ -59,18 +60,18 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
   return (
     <div className="flex flex-col items-center font-medium">
       <div className="flex w-full items-center justify-between gap-x-2">
-        <span className="text-sm text-muted-foreground">Image:</span>
+        <span className="text-sm text-muted-foreground">Video:</span>
         <Button variant={"ghost"} size={"icon"} onClick={toggleEdit}>
-          {!isEditing && !initialData.imageUrl && (
+          {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4" />
-              <span className="sr-only">Add an image</span>
+              <span className="sr-only">Add an video</span>
             </>
           )}
-          {!isEditing && initialData.imageUrl && (
+          {!isEditing && initialData.videoUrl && (
             <>
               <Pencil className="h-4 w-4" />
-              <span className="sr-only">Edit image</span>
+              <span className="sr-only">Edit video</span>
             </>
           )}
           {isEditing && (
@@ -83,7 +84,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
       </div>
 
       {!isEditing &&
-        (!initialData.imageUrl ? (
+        (!initialData.videoUrl ? (
           <div className="flex aspect-video w-full items-center justify-center rounded-md bg-slate-200 dark:bg-slate-800">
             <ImageIcon className="h-10 w-10 text-muted-foreground" />
           </div>
@@ -96,7 +97,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
           onSubmit={onSubmit}
           className="flex aspect-video w-full flex-col items-center justify-center gap-4 rounded-md border bg-primary-foreground text-xs text-muted-foreground"
           style={{
-            backgroundImage: `url(${initialData.imageUrl})`,
+            backgroundImage: `url(${initialData.videoUrl})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -105,7 +106,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
             <input
               type="hidden"
               name="oldFile"
-              value={originalImage as string}
+              value={originalVideo as string}
             />
             <Label htmlFor="file" className="cursor-pointer">
               {file ? (
@@ -116,7 +117,7 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
             </Label>
             <Input
               type="file"
-              accept="image/*"
+              accept="video/*"
               name="file"
               onChange={(e) => {
                 setFile(e.target.files?.[0]);
@@ -141,19 +142,25 @@ const ImageUploadForm = ({ initialData }: ImageUploadFormProps) => {
           </div>
         </form>
       )}
-      {!isEditing && initialData.imageUrl && (
-        <div className="flex aspect-video w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-md border bg-primary-foreground text-xs text-muted-foreground">
-          <Image
-            src={initialData.imageUrl}
-            alt={initialData.title}
-            width={500}
-            height={500}
-            className="aspect-video w-full object-cover"
-          />
+      {initialData.videoUrl?.split("=").pop() as string}
+      {!isEditing && initialData.videoUrl && (
+        <div className="flex aspect-video w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-md border text-xs text-muted-foreground">
+          {/* <YouTubeEmbed
+            videoid={initialData.videoUrl?.split("=").pop() as string}
+            params="controls=0&modestbranding=1"
+            playlabel="Play"
+            // height={400}
+            width={550}
+          /> */}
+          {/* <iframe
+            src={initialData.videoUrl as string}
+            frameBorder={"0"}
+            allowFullScreen
+          /> */}
         </div>
       )}
     </div>
   );
 };
 
-export default ImageUploadForm;
+export default VideoUploadForm;

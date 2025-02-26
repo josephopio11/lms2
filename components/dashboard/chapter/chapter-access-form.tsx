@@ -11,6 +11,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle, Pencil, X, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -89,12 +90,16 @@ const AccessForm = ({ initialData, courseId, chapterId }: AccessFormProps) => {
           {initialData.isFree ? (
             <>
               <CheckCircle className="h-6 w-6 text-green-500" />
-              <span className="font-semibold text-green-500">Free</span>
+              <span className="font-semibold text-green-500">
+                Free sample for previewing.
+              </span>
             </>
           ) : (
             <>
               <XCircle className="h-6 w-6 text-red-500" />
-              <span className="font-semibold text-red-500">Paid</span>
+              <span className="font-semibold text-red-500">
+                Not free for viewing.
+              </span>
             </>
           )}
         </span>
@@ -115,12 +120,15 @@ const AccessForm = ({ initialData, courseId, chapterId }: AccessFormProps) => {
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
+                      id="isFree"
                     />
                   </FormControl>
-                  <div className="space-y-1 leading-none">
+                  <div className="cursor-pointer space-y-1 leading-none">
                     <FormDescription>
-                      Check this box if you want to make this chapter free for
-                      preview purposes.
+                      <Label htmlFor="isFree">
+                        Check this box if you want to make this chapter free for
+                        preview purposes.
+                      </Label>
                     </FormDescription>
                   </div>
                   <FormMessage />

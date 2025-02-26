@@ -210,7 +210,34 @@ export async function updateCoursePrice(values: CoursePriceType, id: string) {
   }
 }
 
-export async function writeFileNameToDatabase(
+export async function writeImageNameToDatabase(
+  imageUrl: string,
+  id: string,
+  slug: string,
+) {
+  const session = await auth();
+  if (!session?.user) return;
+  if (!id) return;
+  if (!imageUrl) return;
+
+  try {
+    await db.course.update({
+      where: { id },
+      data: {
+        imageUrl,
+      },
+    });
+
+    revalidatePath("/teacher/courses");
+    revalidatePath(`/teacher/courses/${slug}`);
+    return;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export async function writeVideoNameToDatabase(
   imageUrl: string,
   id: string,
   slug: string,

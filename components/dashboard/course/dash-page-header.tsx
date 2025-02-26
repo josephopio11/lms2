@@ -16,15 +16,19 @@ interface PageHeaderProps {
   link2?: string;
   title3?: string;
   link3?: string;
+  title4?: string;
+  link4?: string;
 }
 
 const PageHeader = ({
   title,
   title2,
   title3,
+  title4,
   link,
   link2,
   link3,
+  link4,
 }: PageHeaderProps) => {
   return (
     <header className="sticky left-0 right-0 top-0 z-10 flex h-16 flex-row items-center justify-between gap-2 border-b px-4 backdrop-blur-lg">
@@ -69,6 +73,18 @@ const PageHeader = ({
                   <BreadcrumbLink href={link3}>
                     <BreadcrumbPage className="capitalize">
                       {title3}
+                    </BreadcrumbPage>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
+            {title4 && (
+              <>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbLink href={link4}>
+                    <BreadcrumbPage className="capitalize">
+                      {title4}
                     </BreadcrumbPage>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
