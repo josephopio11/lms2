@@ -6,7 +6,7 @@ import CategoryForm from "@/components/dashboard/course/category-form";
 import ChaptersForm from "@/components/dashboard/course/chapters-form";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
 import DescriptionForm from "@/components/dashboard/course/description-form";
-import ImageUploadForm from "@/components/dashboard/course/image-uplad-form";
+import ImageUploadForm from "@/components/dashboard/course/image-upload-form";
 import PriceForm from "@/components/dashboard/course/price-form";
 import { ProgressBar } from "@/components/dashboard/course/progress-bar";
 import TitleForm from "@/components/dashboard/course/title-form";

@@ -108,6 +108,7 @@ export async function updateChapterTitle(
 export async function updateChapterDescription(
   values: CourseAndChapterDescriptionType,
   chapterId: string,
+  courseId: string,
 ) {
   console.log({ values, chapterId });
   const { description } = values;
@@ -115,6 +116,7 @@ export async function updateChapterDescription(
   const answer = await db.chapter.update({
     where: {
       id: chapterId,
+      courseId,
     },
     data: {
       description,
@@ -127,6 +129,7 @@ export async function updateChapterDescription(
 export async function chapterFreedom(
   values: { isFree: boolean },
   chapterId: string,
+  courseId: string,
 ) {
   console.log({ values, chapterId });
   const { isFree } = values;
@@ -134,6 +137,7 @@ export async function chapterFreedom(
   const answer = await db.chapter.update({
     where: {
       id: chapterId,
+      courseId,
     },
     data: {
       isFree,

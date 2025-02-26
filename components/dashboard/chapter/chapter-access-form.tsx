@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil, X } from "lucide-react";
+import { CheckCircle, Pencil, X, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -50,7 +50,7 @@ const AccessForm = ({ initialData, courseId, chapterId }: AccessFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       console.log(values);
-      const answer = await chapterFreedom(values, chapterId);
+      const answer = await chapterFreedom(values, chapterId, courseId);
 
       toggleEdit();
 
@@ -85,7 +85,19 @@ const AccessForm = ({ initialData, courseId, chapterId }: AccessFormProps) => {
       </div>
 
       {!isEditing && (
-        <span className="w-full rounded p-2 text-sm">{initialData.isFree}</span>
+        <span className="flex w-full items-center justify-start gap-2 rounded">
+          {initialData.isFree ? (
+            <>
+              <CheckCircle className="h-6 w-6 text-green-500" />
+              <span className="font-semibold text-green-500">Free</span>
+            </>
+          ) : (
+            <>
+              <XCircle className="h-6 w-6 text-red-500" />
+              <span className="font-semibold text-red-500">Paid</span>
+            </>
+          )}
+        </span>
       )}
 
       {isEditing && (
