@@ -18,12 +18,16 @@ export async function getAllCourses() {
   if (!userId) return;
 
   const courses = db.course.findMany({
+    where: {
+      userId,
+    },
     select: {
       id: true,
       title: true,
       imageUrl: true,
       slug: true,
       price: true,
+      isPublished: true,
       category: {
         select: {
           name: true,
@@ -37,6 +41,9 @@ export async function getAllCourses() {
           role: true,
         },
       },
+    },
+    orderBy: {
+      title: "asc",
     },
   });
 

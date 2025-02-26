@@ -2,8 +2,12 @@ import { getAllCourses } from "@/app/(front)/actions/course";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
 import StatCard from "@/components/dashboard/course/stat-card";
 import { InfoCard } from "@/components/dashboard/info-card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { formatCurrency } from "@/lib/utils";
 import { BookOpenCheck, CheckCircle, School } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export const generateMetadata = () => ({
@@ -19,6 +23,7 @@ const CoursesPage = async () => {
         <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 p-6 md:min-h-min">
           <div className="flex flex-row justify-between">
             <h2>Created Courses</h2>
+
             <Button>
               <Link href="/teacher/create">Create Course</Link>
             </Button>
@@ -68,12 +73,61 @@ const CoursesPage = async () => {
         </div>
         <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 p-6 md:min-h-min">
           <div className="flex flex-row justify-between">
-            <h2>Created Courses</h2>
-            <Button>
-              <Link href="/teacher/create">Create Course</Link>
-            </Button>
+            <h2 className="text-2xl font-bold">Created Courses</h2>
+            <div className="flex w-1/2 flex-row items-center justify-end gap-2">
+              <Input placeholder="Search" className="w-1/2" />
+              <Button size={"sm"} asChild>
+                <Link href="/teacher/create" className="font-bold text-white">
+                  Create Course
+                </Link>
+              </Button>
+            </div>
           </div>
-          <pre>{JSON.stringify(courses, null, 2)}</pre>
+
+          <div className="text-sm text-muted-foreground">
+            Here are the courses you have created currently.
+          </div>
+          <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {courses.map((course) => (
+              <div
+                key={course.id}
+                className="relative flex aspect-video flex-col gap-2 overflow-hidden rounded-md border-2 border-white/50 shadow-md shadow-black/50 transition hover:shadow-lg hover:shadow-black/50"
+              >
+                <Link href={`/teacher/courses/${course.id}`}>
+                  <Image
+                    src={course.imageUrl || "/auth.jpg"}
+                    alt={course.title}
+                    width={550}
+                    height={550}
+                    className="aspect-video object-cover"
+                  />
+                  <span className="absolute right-2 top-2 flex gap-2">
+                    <Badge
+                      variant={course.isPublished ? "secondary" : "outline"}
+                      className="text-white"
+                    >
+                      {course.isPublished ? "Published" : "Draft"}
+                    </Badge>
+                    <Badge variant={"destructive"}>
+                      {formatCurrency(course.price || 0)}
+                    </Badge>
+                  </span>
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-muted/50 to-muted p-4">
+                    <div className="flex justify-between">
+                      <p className="line-clamp-1 text-xs">
+                        {course.category?.name}
+                      </p>
+                      <Badge className="ml-2 line-clamp-1 text-xs text-white">
+                        {course.user.name?.split(" ")[0]}
+                      </Badge>
+                    </div>
+                    <h2 className="text-base font-bold">{course.title}</h2>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+          {/* <pre>{JSON.stringify(courses, null, 2)}</pre> */}
         </div>
       </div>
     </>
