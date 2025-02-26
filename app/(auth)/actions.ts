@@ -90,13 +90,27 @@ export async function handleSignUp({
 
     // hash the password
     const hashedPassword = await bcryptjs.hash(password, 10);
-    await db.user.create({
+    const userCreated = await db.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
       },
     });
+
+    if (userCreated) {
+      await db.userProfile.upsert({
+        where: {
+          userId: userCreated.id,
+        },
+        create: {
+          userId: userCreated.id,
+        },
+        update: {
+          userId: userCreated.id,
+        },
+      });
+    }
 
     return { success: true, message: "Account created successfully." };
   } catch (error) {
