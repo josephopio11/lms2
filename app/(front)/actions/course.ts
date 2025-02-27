@@ -43,7 +43,7 @@ export async function getAllCourses() {
       },
     },
     orderBy: {
-      title: "asc",
+      createdAt: "desc",
     },
   });
 

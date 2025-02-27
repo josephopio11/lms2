@@ -1,12 +1,11 @@
 import { getAllCourses } from "@/app/(front)/actions/course";
 import PageHeader from "@/components/dashboard/course/dash-page-header";
-import StatCard from "@/components/dashboard/course/stat-card";
 import { InfoCard } from "@/components/dashboard/info-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/utils";
-import { BookOpenCheck, CheckCircle, School } from "lucide-react";
+import { BookOpenCheck, School } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -40,35 +39,36 @@ const CoursesPage = async () => {
     <>
       <PageHeader title="Courses" />
       <div className="flex flex-1 flex-col gap-4 p-4 sm:pt-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <InfoCard
             title="Total Courses"
             value={courses.length}
-            description="The total number of courses you have created."
+            description="Courses created."
             trendValue={-10}
             Icon={School}
           />
           <InfoCard
             title="Published"
             value={3}
-            description="Courses you have published this week"
+            description="Courses published this week"
             Icon={BookOpenCheck}
             trendValue={100}
           />
           <InfoCard
             title="Purchased"
             value={123}
-            description="Total number of courses purchased this month"
+            description="Courses purchased this month"
             Icon={BookOpenCheck}
             trendValue={132}
             isCurrency
           />
-
-          <StatCard
-            title="Total Courses"
-            value={courses.length}
-            percentage={500}
-            Icon={CheckCircle}
+          <InfoCard
+            title="Refunds"
+            value={-46}
+            description="Courses refunded this month"
+            Icon={BookOpenCheck}
+            trendValue={1}
+            isCurrency
           />
         </div>
         <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 p-6 md:min-h-min">

@@ -6,6 +6,7 @@ import {
   CourseAndChapterDescriptionType,
   CourseAndChapterTitleType,
 } from "@/lib/schemas";
+import { revalidatePath } from "next/cache";
 
 export async function handleCreateChapter(
   data: CourseAndChapterTitleType,
@@ -147,4 +148,95 @@ export async function chapterFreedom(
   return answer;
 }
 
-export async function chapterPublish() {}
+export async function chapterPublishUnpublish(
+  chapterId: string,
+  courseId: string,
+) {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!userId) return;
+
+  const courseOwner = await db.course.findUnique({
+    where: {
+      id: courseId,
+      userId: userId,
+      chapters: {
+        some: {
+          id: chapterId,
+        },
+      },
+    },
+    include: {
+      chapters: true,
+    },
+  });
+
+  if (!courseOwner) return;
+
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: chapterId,
+    },
+  });
+
+  if (!chapter) return;
+
+  try {
+    await db.chapter.update({
+      where: {
+        id: chapterId,
+      },
+      data: {
+        isPublished: !chapter.isPublished,
+      },
+    });
+
+    revalidatePath(`/teacher/courses/${courseId}`);
+  } catch (error) {
+    console.log(error);
+  }
+
+  revalidatePath(`/teacher/courses/${courseId}`);
+}
+
+export async function chapterDelete(chapterId: string, courseId: string) {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!userId) return;
+
+  const courseOwner = await db.course.findUnique({
+    where: {
+      id: courseId,
+      userId: userId,
+      chapters: {
+        some: {
+          id: chapterId,
+        },
+      },
+    },
+    include: {
+      chapters: true,
+    },
+  });
+
+  if (!courseOwner) return;
+
+  try {
+    await db.chapter.delete({
+      where: {
+        id: chapterId,
+      },
+    });
+
+    // add other functions to clean up all stuff related to the chapter including mux data
+
+    revalidatePath(`/teacher/courses/${courseId}`);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
