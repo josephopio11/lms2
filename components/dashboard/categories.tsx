@@ -24,6 +24,9 @@ import CategoryItem from "./categoryItem";
 
 interface CategoriesProps {
   items: { id: string; name: string }[] | undefined;
+  className?: string;
+  selectedCategory?: string;
+  onSelectCategory?: (id: string) => void;
 }
 
 const iconMap = [
