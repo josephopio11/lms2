@@ -315,3 +315,103 @@ export async function updateCourseCategory(
     return;
   }
 }
+
+export async function coursePublishUnpublish(courseId: string) {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!userId) return { success: false, message: "Unauthorised" };
+
+  const course = await db.course.findUnique({
+    where: {
+      id: courseId,
+      userId: userId,
+    },
+  });
+
+  if (!course) return { success: false, message: "Unauthorised" };
+
+  try {
+    const courseToPublish = await db.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        isPublished: !course.isPublished,
+      },
+    });
+
+    if (!courseToPublish) {
+      return { success: false, message: "Unauthorised" };
+    } else {
+      if (courseToPublish.isPublished) {
+        revalidatePath(`/teacher/courses/${courseId}`);
+        return { success: true, message: "Course published successfully" };
+      } else {
+        revalidatePath(`/teacher/courses/${courseId}`);
+        return { success: true, message: "Course unpublished successfully" };
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+  revalidatePath(`/teacher/courses/${courseId}`);
+}
+
+export async function courseDelete(courseId: string) {
+  const session = await auth();
+  const userId = session?.user.id;
+
+  if (!userId) {
+    return { success: false, message: "Unauthorised" };
+  }
+
+  const course = await db.course.findUnique({
+    where: {
+      id: courseId,
+      userId: userId,
+    },
+    include: {
+      chapters: true,
+    },
+  });
+
+  if (!course) {
+    return { success: false, message: "Unauthorised" };
+  }
+
+  if (course.isPublished) {
+    return { success: false, message: "Cannot delete published course" };
+  }
+
+  // TODO: if course has published chapters, it should not acceept to get deleted
+
+  if (course.chapters.some((chapter) => chapter.isPublished)) {
+    return {
+      success: false,
+      message:
+        "Cannot delete course with published chapters. First unpblish all chapters then try to delete the course.",
+    };
+  }
+
+  try {
+    await db.course.delete({
+      where: {
+        id: course.id,
+      },
+    });
+
+    // add other functions to clean up all stuff related to the course including mux data
+
+    revalidatePath(`/teacher/courses/${courseId}`);
+
+    return { success: true, message: "Course deleted successfully" };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Something went wrong. Please try again",
+    };
+  }
+}

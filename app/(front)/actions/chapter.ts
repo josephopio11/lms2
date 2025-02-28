@@ -204,7 +204,9 @@ export async function chapterDelete(chapterId: string, courseId: string) {
   const session = await auth();
   const userId = session?.user.id;
 
-  if (!userId) return;
+  if (!userId) {
+    return { success: false, message: "Unauthorised" };
+  }
 
   const courseOwner = await db.course.findUnique({
     where: {
@@ -216,12 +218,25 @@ export async function chapterDelete(chapterId: string, courseId: string) {
         },
       },
     },
-    include: {
-      chapters: true,
+  });
+
+  if (!courseOwner) {
+    return { success: false, message: "Unauthorised" };
+  }
+
+  const chapter = await db.chapter.findUnique({
+    where: {
+      id: chapterId,
     },
   });
 
-  if (!courseOwner) return;
+  if (!chapter) {
+    return { success: false, message: "Chapter not found" };
+  }
+
+  if (chapter.isPublished) {
+    return { success: false, message: "Cannot delete published chapter" };
+  }
 
   try {
     await db.chapter.delete({
@@ -234,9 +249,9 @@ export async function chapterDelete(chapterId: string, courseId: string) {
 
     revalidatePath(`/teacher/courses/${courseId}`);
 
-    return true;
+    return { success: true, message: "Chapter deleted successfully" };
   } catch (error) {
     console.log(error);
-    return false;
+    return { success: false, message: "Something went wrong" };
   }
 }

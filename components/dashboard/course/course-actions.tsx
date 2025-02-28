@@ -1,42 +1,51 @@
 "use client";
 
 import {
-  chapterDelete,
-  chapterPublishUnpublish,
-} from "@/app/(front)/actions/chapter";
+  courseDelete,
+  coursePublishUnpublish,
+} from "@/app/(front)/actions/course";
 import ConfirmModal from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
+import { useConfettiStore } from "@/hooks/use-confetti-store";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface ChapterActionsProps {
+interface CourseActionsProps {
   disabled: boolean;
   courseId: string;
-  chapterId: string;
   isPublished: boolean;
 }
 
-const ChapterActions = ({
+const CourseActions = ({
   disabled,
   courseId,
-  chapterId,
   isPublished,
-}: ChapterActionsProps) => {
+}: CourseActionsProps) => {
   const router = useRouter();
+  const confetti = useConfettiStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const publishChapter = async () => {
     try {
       setIsLoading(true);
 
-      await chapterPublishUnpublish(chapterId, courseId);
+      const result = await coursePublishUnpublish(courseId);
 
-      toast.success("Chapter published.");
-
-      setIsLoading(false);
-      router.push(`/teacher/courses/${courseId}`);
+      if (result?.success) {
+        toast.success(result.message);
+        if (
+          result.success &&
+          result.message === "Course published successfully"
+        ) {
+          confetti.onOpen();
+        }
+        setIsLoading(false);
+        router.push(`/teacher/courses/${courseId}`);
+      } else {
+        toast.error(result?.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong. Please try again.");
@@ -49,13 +58,14 @@ const ChapterActions = ({
     try {
       setIsLoading(true);
 
-      const answer = await chapterDelete(chapterId, courseId);
+      const answer = await courseDelete(courseId);
 
       if (!answer.success) {
         toast.error(answer.message);
         return;
       }
-      toast.success("Chapter deleted.");
+
+      toast.success(answer.message);
 
       setIsLoading(false);
       router.push(`/teacher/courses/${courseId}`);
@@ -86,4 +96,4 @@ const ChapterActions = ({
   );
 };
 
-export default ChapterActions;
+export default CourseActions;

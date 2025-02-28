@@ -37,7 +37,7 @@ const CoursesPage = async () => {
 
   return (
     <>
-      <PageHeader title="Courses" />
+      <PageHeader title="Courses" link="/teacher/courses" />
       <div className="flex flex-1 flex-col gap-4 p-4 sm:pt-4">
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <InfoCard
@@ -103,8 +103,8 @@ const CoursesPage = async () => {
                   />
                   <span className="absolute right-2 top-2 flex gap-2">
                     <Badge
-                      variant={course.isPublished ? "secondary" : "outline"}
-                      className="text-white"
+                      variant={course.isPublished ? "secondary" : "default"}
+                      className="text-gray-700 dark:text-white"
                     >
                       {course.isPublished ? "Published" : "Draft"}
                     </Badge>

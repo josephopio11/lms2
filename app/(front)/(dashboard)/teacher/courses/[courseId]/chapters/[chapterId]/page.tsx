@@ -70,6 +70,7 @@ const SingleChapter = async ({ params }: PageProps) => {
         title2={chapter.course.title}
         link2={`/teacher/courses/${chapter.course.id}`}
         title3={"Chapter: " + chapter?.title}
+        link3={`/teacher/courses/${chapter.course.id}/chapters/${chapter.id}`}
       />
       {!chapter.isPublished && (
         <Banner
@@ -91,7 +92,7 @@ const SingleChapter = async ({ params }: PageProps) => {
             <div className="flex items-center justify-start gap-2">
               <Button asChild size={"icon"} className="mr-2">
                 <Link href={`/teacher/courses/${chapter.course.id}`}>
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-4 w-4 text-white" />
                 </Link>
               </Button>
               <h1 className="text-2xl font-medium">

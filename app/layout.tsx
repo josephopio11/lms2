@@ -1,4 +1,5 @@
 import { DarkModeChangeButton } from "@/components/dark-mode-button";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
@@ -35,6 +36,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <ConfettiProvider />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
