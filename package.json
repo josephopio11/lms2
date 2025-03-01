@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "cleanup": "rm -rf node_modules/ && rm -rf .next/",
     "start": "next start",
     "lint": "next lint",
     "seed": "tsx prisma/seed.ts"
